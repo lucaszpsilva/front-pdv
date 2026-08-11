@@ -21,6 +21,15 @@ export const App = () => {
   const dataFormatada = dataBruta.charAt(0).toUpperCase() + dataBruta.slice(1);
   const horaFormatada = dataAtual.toLocaleTimeString("pt-BR");
 
+  const [barCode, setBarcode] = useState("");
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!barCode.trim()) return;
+    console.log("Código lido pelo Leitor: ", barCode);
+    setBarcode("");
+  };
+
   return (
     <main className="bg-gray-50 w-screen h-screen flex flex-col overflow-hidden">
       {/* TOPSIDE (Header fixo no topo) */}
@@ -44,20 +53,25 @@ export const App = () => {
         {/* COLUNA DA ESQUERDA (Tabela de Produtos e Busca) - Ocupa 8 ou 9 colunas de 12 */}
         <section className="col-span-8 lg:col-span-9 flex flex-col h-full gap-4">
           {/* Input + Botão */}
-          <div className="flex gap-2">
+          <form onSubmit={handleSubmit} className="flex gap-2">
             <input
               type="text"
+              value={barCode}
+              onChange={(e) => setBarcode(e.target.value)}
               className="flex-1 h-12 px-4 text-gray-600 text-lg rounded-xl border border-gray-300 focus:border-emerald-500 outline-none transition"
               placeholder="Leitura de código de barras ou digitação manual..."
+              autoFocus
             />
-            <button className="px-6 h-12 bg-emerald-500 hover:bg-emerald-600 rounded-xl font-bold text-white flex items-center justify-center gap-2 cursor-pointer transition">
+            <button
+              type="submit"
+              className="px-6 h-12 bg-emerald-500 hover:bg-emerald-600 rounded-xl font-bold text-white flex items-center justify-center gap-2 cursor-pointer transition"
+            >
               Adicionar
               <span className="px-2 py-0.5 text-xs font-normal rounded bg-white text-gray-500">
                 Enter
               </span>
             </button>
-          </div>
-
+          </form>
           {/* Área da Tabela de Itens (Ocupa todo o resto da altura disponível) */}
           <div className="flex-1 bg-white border border-gray-200 rounded-2xl p-4 flex flex-col justify-center items-center text-gray-400">
             {/* O componente da Tabela ou estado "Nenhum item" entra aqui */}
@@ -110,7 +124,7 @@ export const App = () => {
                 VA/VR
               </button>
             </div>
-            <div className="flex flex-col gap-1 w-full max-w-xs">
+            <div className="flex flex-col mt-4 gap-1 w-full max-w-xs">
               {/* Label superior */}
               <label className="text-xs font-semibold text-slate-400 tracking-wider uppercase">
                 Valor Recebido
