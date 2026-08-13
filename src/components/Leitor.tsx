@@ -1,12 +1,18 @@
 import { useState } from "react";
 
-export const Leitor = () => {
+interface LeitorProps {
+  onAdicionar: (codigo: number) => void;
+}
+
+export const Leitor = ({ onAdicionar }: LeitorProps) => {
   const [barCode, setBarcode] = useState("");
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!barCode.trim()) return;
-    console.log("Código lido pelo Leitor: ", barCode);
+
+    // Dispara a função do pai convertendo texto para número
+    onAdicionar(Number(barCode));
     setBarcode("");
   };
 

@@ -1,42 +1,11 @@
-import { useState } from "react";
+import { testeProduto } from "../App";
 
-export const CaixaRapido = () => {
-  interface testeProduto {
-    id: number;
-    name: string;
-    barCode: number;
-    qtd: number;
-    unid: number;
-    total: number;
-  }
+interface CaixaRapidoProps {
+  produtos: testeProduto[];
+  onDeletar: (id: number) => void;
+}
 
-  const testeProdutos: testeProduto[] = [
-    {
-      id: 1,
-      name: "produtoTeste",
-      barCode: 123,
-      qtd: 1,
-      unid: 11.4,
-      total: 11.4,
-    },
-    {
-      id: 2,
-      name: "testeProduto",
-      barCode: 1234,
-      qtd: 1,
-      unid: 7.8,
-      total: 7.8,
-    },
-  ];
-
-  const [produtos, setProdutos] = useState(testeProdutos);
-
-  const handleDeletarProduto = (idParaDeletar: number) => {
-    setProdutos((produtosAtuais) =>
-      produtosAtuais.filter((item) => item.id !== idParaDeletar),
-    );
-  };
-
+export const CaixaRapido = ({ produtos, onDeletar }: CaixaRapidoProps) => {
   return (
     <div className="flex-1 bg-white border border-gray-200 rounded-2xl flex flex-col justify-between overflow-hidden shadow-sm">
       <div className="bg-slate-50 border-b border-gray-200 px-6 py-3 grid grid-cols-16 gap-2 text-xs font-semibold text-slate-400 tracking-wider uppercase">
@@ -49,7 +18,7 @@ export const CaixaRapido = () => {
       </div>
 
       <div className="flex-1 overflow-y-auto">
-        {testeProdutos.length === 0 ? (
+        {produtos.length === 0 ? (
           <div className="h-full flex flex-col justify-center items-center text-center p-6">
             <div className="w-12 h-12 mb-3 bg-slate-100 rounded-xl flex items-center justify-center text-slate-400 border border-dashed border-slate-300">
               <svg
@@ -72,13 +41,13 @@ export const CaixaRapido = () => {
             </p>
           </div>
         ) : (
-          produtos.map((item) => (
+          produtos.map((item, index) => (
             <div
               key={item.id}
               className="px-6 py-3 grid grid-cols-16 gap-2 items-center text-sm border-b border-gray-100 hover:bg-slate-50 transition"
             >
               <div className="col-span-1 font-semibold text-slate-500">
-                {item.id}
+                {index + 1}
               </div>
               <div className="col-span-6 flex flex-col">
                 <span className="font-medium text-slate-800">{item.name}</span>
@@ -95,7 +64,7 @@ export const CaixaRapido = () => {
               </div>
               <div className="col-span-1 flex justify-end">
                 <button
-                  onClick={() => handleDeletarProduto(item.id)}
+                  onClick={() => onDeletar(item.id)}
                   className="p-1.5 text-slate-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition cursor-pointer"
                   title="Remover item"
                 >
