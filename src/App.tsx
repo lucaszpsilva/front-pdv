@@ -76,6 +76,7 @@ export const App = () => {
     setProdutos((prev) => [...prev, novoItem]);
   };
 
+
   return (
     <main className="bg-gray-50 w-screen h-screen flex flex-col overflow-hidden">
       <header className="h-12 flex border-b border-gray-300 bg-white items-center px-4 shrink-0">

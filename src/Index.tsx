@@ -1,9 +1,27 @@
 import "./App.css";
 import { useState, useEffect } from "react";
+import { WebviewWindow } from "@tauri-apps/api/webviewWindow";
 
 export const Index = () => {
   const [dataAtual, setDataAtual] = useState(new Date());
 
+  // ✅ Função para o Caixa (F1)
+  const openCaixa = async () => {
+    const existing = await WebviewWindow.getByLabel("caixa");
+    if (existing) {
+      existing.setFocus();
+      return;
+    }
+    new WebviewWindow("caixa", {
+      url: "index.html#caixa",
+      title: "Frente de Caixa",
+      maximized: true,
+      center: true,
+      resizable: true,
+    });
+  };
+
+  // Relógio
   useEffect(() => {
     const timer = setInterval(() => setDataAtual(new Date()), 1000);
     return () => clearInterval(timer);
@@ -21,7 +39,7 @@ export const Index = () => {
 
   return (
     <main className="w-screen h-screen bg-gray-50 flex flex-col justify-between p-6 select-none overflow-hidden">
-      {/* Header Superior - Padrão do Sistema */}
+      {/* Header Superior */}
       <header className="h-12 flex items-center justify-between bg-white px-6 rounded-xl border border-gray-200 shadow-sm">
         <div className="flex items-center">
           <h1 className="font-extrabold tracking-tight text-gray-900 pr-6 border-r border-gray-200 text-lg">
@@ -44,12 +62,14 @@ export const Index = () => {
         </div>
       </header>
 
-      {/* Grid Central de Ações */}
+      {/* Grid Central */}
       <div className="w-full max-w-5xl mx-auto flex flex-col gap-6">
-        {/* Linha Superior - Principais Ações */}
         <div className="grid grid-cols-2 gap-6">
-          {/* Botão Caixa (Destaque Principal em Verde) */}
-          <button className="group h-56 rounded-2xl bg-emerald-500 hover:bg-emerald-600 p-8 flex flex-col justify-between text-left shadow-lg shadow-emerald-500/15 hover:shadow-emerald-500/25 hover:-translate-y-1 transition-all duration-200 cursor-pointer border border-emerald-400/40">
+          {/* Botão Caixa */}
+          <button
+            onClick={openCaixa}
+            className="group h-56 rounded-2xl bg-emerald-500 hover:bg-emerald-600 p-8 flex flex-col justify-between text-left shadow-lg shadow-emerald-500/15 hover:shadow-emerald-500/25 hover:-translate-y-1 transition-all duration-200 cursor-pointer border border-emerald-400/40"
+          >
             <div className="flex items-center justify-between">
               <span className="p-3.5 bg-white/20 rounded-xl text-white backdrop-blur-sm group-hover:scale-105 transition-transform">
                 <svg
@@ -111,9 +131,8 @@ export const Index = () => {
           </button>
         </div>
 
-        {/* Linha Inferior - Utilitários */}
+        {/* Linha Inferior */}
         <div className="grid grid-cols-3 gap-6">
-          {/* Relatório */}
           <button className="group h-36 rounded-2xl bg-white hover:bg-gray-50 border border-gray-200 hover:border-gray-300 p-5 flex flex-col justify-between text-left shadow-xs hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 cursor-pointer">
             <span className="p-2.5 bg-gray-100 rounded-lg w-fit text-gray-600 group-hover:text-emerald-600 group-hover:bg-emerald-50 transition-colors">
               <svg
@@ -136,7 +155,6 @@ export const Index = () => {
             </div>
           </button>
 
-          {/* Suporte */}
           <button className="group h-36 rounded-2xl bg-white hover:bg-gray-50 border border-gray-200 hover:border-gray-300 p-5 flex flex-col justify-between text-left shadow-xs hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 cursor-pointer">
             <span className="p-2.5 bg-gray-100 rounded-lg w-fit text-gray-600 group-hover:text-emerald-600 group-hover:bg-emerald-50 transition-colors">
               <svg
@@ -159,7 +177,7 @@ export const Index = () => {
             </div>
           </button>
 
-          {/* Configurações */}
+          {/* Botão Configurações com onClick correto */}
           <button className="group h-36 rounded-2xl bg-white hover:bg-gray-50 border border-gray-200 hover:border-gray-300 p-5 flex flex-col justify-between text-left shadow-xs hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 cursor-pointer">
             <span className="p-2.5 bg-gray-100 rounded-lg w-fit text-gray-600 group-hover:text-emerald-600 group-hover:bg-emerald-50 transition-colors">
               <svg
@@ -172,7 +190,7 @@ export const Index = () => {
                   strokeLinecap="round"
                   strokeLinejoin="round"
                   strokeWidth="2"
-                  d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"
+                  d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37.996.608 2.296.07 2.572-1.065z"
                 />
                 <path
                   strokeLinecap="round"
@@ -192,7 +210,7 @@ export const Index = () => {
         </div>
       </div>
 
-      {/* Rodapé no mesmo padrão de atalhos da tela de vendas */}
+      {/* Footer */}
       <footer className="flex items-center justify-between text-xs text-gray-400 px-4">
         <div className="flex gap-4">
           <span>
