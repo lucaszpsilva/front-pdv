@@ -1,20 +1,23 @@
 import "./App.css";
 import { useState, useEffect } from "react";
 import { WebviewWindow } from "@tauri-apps/api/webviewWindow";
+import { useNavigate } from "react-router-dom";
 
 export const Index = () => {
   const [dataAtual, setDataAtual] = useState(new Date());
 
-  // ✅ Função para o Caixa (F1)
-  const openCaixa = async () => {
-    const existing = await WebviewWindow.getByLabel("caixa");
+  const navigate = useNavigate();
+
+  // ✅ Função para o Produtos (F2)
+  const openProdutos = async () => {
+    const existing = await WebviewWindow.getByLabel("produtos");
     if (existing) {
       existing.setFocus();
       return;
     }
-    new WebviewWindow("caixa", {
-      url: "index.html#caixa",
-      title: "Frente de Caixa",
+    new WebviewWindow("produtos", {
+      url: "index.html#produtos",
+      title: "Produtos",
       maximized: true,
       center: true,
       resizable: true,
@@ -67,7 +70,7 @@ export const Index = () => {
         <div className="grid grid-cols-2 gap-6">
           {/* Botão Caixa */}
           <button
-            onClick={openCaixa}
+            onClick={() => navigate("/caixa")}
             className="group h-56 rounded-2xl bg-emerald-500 hover:bg-emerald-600 p-8 flex flex-col justify-between text-left shadow-lg shadow-emerald-500/15 hover:shadow-emerald-500/25 hover:-translate-y-1 transition-all duration-200 cursor-pointer border border-emerald-400/40"
           >
             <div className="flex items-center justify-between">
@@ -99,7 +102,10 @@ export const Index = () => {
           </button>
 
           {/* Botão Produtos */}
-          <button className="group h-56 rounded-2xl bg-white hover:bg-gray-50/80 border border-gray-200 hover:border-gray-300 p-8 flex flex-col justify-between text-left shadow-xs hover:shadow-md hover:-translate-y-1 transition-all duration-200 cursor-pointer">
+          <button
+            onClick={openProdutos}
+            className="group h-56 rounded-2xl bg-white hover:bg-gray-50/80 border border-gray-200 hover:border-gray-300 p-8 flex flex-col justify-between text-left shadow-xs hover:shadow-md hover:-translate-y-1 transition-all duration-200 cursor-pointer"
+          >
             <div className="flex items-center justify-between">
               <span className="p-3.5 bg-gray-100 rounded-xl text-gray-700 group-hover:bg-emerald-50 group-hover:text-emerald-600 transition-colors">
                 <svg
@@ -133,7 +139,10 @@ export const Index = () => {
 
         {/* Linha Inferior */}
         <div className="grid grid-cols-3 gap-6">
-          <button className="group h-36 rounded-2xl bg-white hover:bg-gray-50 border border-gray-200 hover:border-gray-300 p-5 flex flex-col justify-between text-left shadow-xs hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 cursor-pointer">
+          <button
+            onClick={() => navigate("/relatorios")}
+            className="group h-36 rounded-2xl bg-white hover:bg-gray-50 border border-gray-200 hover:border-gray-300 p-5 flex flex-col justify-between text-left shadow-xs hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 cursor-pointer"
+          >
             <span className="p-2.5 bg-gray-100 rounded-lg w-fit text-gray-600 group-hover:text-emerald-600 group-hover:bg-emerald-50 transition-colors">
               <svg
                 className="w-5 h-5"
@@ -155,7 +164,10 @@ export const Index = () => {
             </div>
           </button>
 
-          <button className="group h-36 rounded-2xl bg-white hover:bg-gray-50 border border-gray-200 hover:border-gray-300 p-5 flex flex-col justify-between text-left shadow-xs hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 cursor-pointer">
+          <button
+            onClick={() => navigate("/suporte")}
+            className="group h-36 rounded-2xl bg-white hover:bg-gray-50 border border-gray-200 hover:border-gray-300 p-5 flex flex-col justify-between text-left shadow-xs hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 cursor-pointer"
+          >
             <span className="p-2.5 bg-gray-100 rounded-lg w-fit text-gray-600 group-hover:text-emerald-600 group-hover:bg-emerald-50 transition-colors">
               <svg
                 className="w-5 h-5"
@@ -178,7 +190,10 @@ export const Index = () => {
           </button>
 
           {/* Botão Configurações com onClick correto */}
-          <button className="group h-36 rounded-2xl bg-white hover:bg-gray-50 border border-gray-200 hover:border-gray-300 p-5 flex flex-col justify-between text-left shadow-xs hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 cursor-pointer">
+          <button
+            onClick={() => navigate("/configuracoes")}
+            className="group h-36 rounded-2xl bg-white hover:bg-gray-50 border border-gray-200 hover:border-gray-300 p-5 flex flex-col justify-between text-left shadow-xs hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 cursor-pointer"
+          >
             <span className="p-2.5 bg-gray-100 rounded-lg w-fit text-gray-600 group-hover:text-emerald-600 group-hover:bg-emerald-50 transition-colors">
               <svg
                 className="w-5 h-5"
