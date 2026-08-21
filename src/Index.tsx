@@ -104,7 +104,7 @@ export const Index = () => {
           {/* Botão Produtos */}
           <button
             onClick={openProdutos}
-            className="group h-56 rounded-2xl bg-white hover:bg-gray-50/80 border border-gray-200 hover:border-gray-300 p-8 flex flex-col justify-between text-left shadow-xs hover:shadow-md hover:-translate-y-1 transition-all duration-200 cursor-pointer"
+            className="group h-56 rounded-2xl bg-white hover:bg-gray-200/80 border border-gray-200 hover:border-gray-300 p-8 flex flex-col justify-between text-left shadow-xs hover:shadow-md hover:-translate-y-1 transition-all duration-200 cursor-pointer"
           >
             <div className="flex items-center justify-between">
               <span className="p-3.5 bg-gray-100 rounded-xl text-gray-700 group-hover:bg-emerald-50 group-hover:text-emerald-600 transition-colors">
@@ -141,7 +141,7 @@ export const Index = () => {
         <div className="grid grid-cols-3 gap-6">
           <button
             onClick={() => navigate("/relatorios")}
-            className="group h-36 rounded-2xl bg-white hover:bg-gray-50 border border-gray-200 hover:border-gray-300 p-5 flex flex-col justify-between text-left shadow-xs hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 cursor-pointer"
+            className="group h-36 rounded-2xl bg-white hover:bg-gray-150 border border-gray-200 hover:border-gray-300 p-5 flex flex-col justify-between text-left shadow-xs hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 cursor-pointer"
           >
             <span className="p-2.5 bg-gray-100 rounded-lg w-fit text-gray-600 group-hover:text-emerald-600 group-hover:bg-emerald-50 transition-colors">
               <svg
@@ -166,7 +166,7 @@ export const Index = () => {
 
           <button
             onClick={() => navigate("/suporte")}
-            className="group h-36 rounded-2xl bg-white hover:bg-gray-50 border border-gray-200 hover:border-gray-300 p-5 flex flex-col justify-between text-left shadow-xs hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 cursor-pointer"
+            className="group h-36 rounded-2xl bg-white hover:bg-gray-150 border border-gray-200 hover:border-gray-300 p-5 flex flex-col justify-between text-left shadow-xs hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 cursor-pointer"
           >
             <span className="p-2.5 bg-gray-100 rounded-lg w-fit text-gray-600 group-hover:text-emerald-600 group-hover:bg-emerald-50 transition-colors">
               <svg
@@ -192,7 +192,7 @@ export const Index = () => {
           {/* Botão Configurações com onClick correto */}
           <button
             onClick={() => navigate("/configuracoes")}
-            className="group h-36 rounded-2xl bg-white hover:bg-gray-50 border border-gray-200 hover:border-gray-300 p-5 flex flex-col justify-between text-left shadow-xs hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 cursor-pointer"
+            className="group h-36 rounded-2xl bg-white hover:bg-gray-150 border border-gray-200 hover:border-gray-300 p-5 flex flex-col justify-between text-left shadow-xs hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 cursor-pointer"
           >
             <span className="p-2.5 bg-gray-100 rounded-lg w-fit text-gray-600 group-hover:text-emerald-600 group-hover:bg-emerald-50 transition-colors">
               <svg
