@@ -5,6 +5,7 @@ import { HashRouter, Routes, Route } from "react-router-dom";
 import { Index } from "./Index";
 import { App } from "./App";
 import { Products } from "./Products";
+import { Suporte } from "./Suporte";
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>
@@ -14,10 +15,10 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
         <Route path="/caixa" element={<App />} /> {/* Tela do Caixa */}
         <Route path="/produtos" element={<Products />} />{" "}
         {/* Tela dos Produtos */}
-        <Route path="/relatorios" element={<Products />} />{" "}
+        <Route path="/relatorios" element={<Index />} />{" "}
         {/* Tela dos Relatorios */}
-        <Route path="/suporte" element={<Products />} /> {/* Tela de Suporte */}
-        <Route path="/configuracoes" element={<Products />} />{" "}
+        <Route path="/suporte" element={<Suporte />} /> {/* Tela de Suporte */}
+        <Route path="/configuracoes" element={<Index />} />{" "}
         {/* Tela dos Configurações */}
       </Routes>
     </HashRouter>
