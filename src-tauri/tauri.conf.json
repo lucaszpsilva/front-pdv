@@ -13,8 +13,9 @@
     "windows": [
       {
         "title": "frontpdv",
-        "resizable": true,
+        "fullscreen": false,
         "maximized": true,
+        "resizable": true,
         "closable": true,
         "minimizable": true,
         "maximizable": true
