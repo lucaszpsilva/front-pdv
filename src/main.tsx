@@ -6,6 +6,7 @@ import { Index } from "./Index";
 import { App } from "./App";
 import { Products } from "./Products";
 import { Suporte } from "./Suporte";
+import { Config } from "./Config";
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>
@@ -18,7 +19,7 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
         <Route path="/relatorios" element={<Index />} />{" "}
         {/* Tela dos Relatorios */}
         <Route path="/suporte" element={<Suporte />} /> {/* Tela de Suporte */}
-        <Route path="/configuracoes" element={<Index />} />{" "}
+        <Route path="/configuracoes" element={<Config />} />{" "}
         {/* Tela dos Configurações */}
       </Routes>
     </HashRouter>
