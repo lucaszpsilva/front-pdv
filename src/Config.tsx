@@ -3,6 +3,7 @@ import { GrConfigure } from "react-icons/gr";
 import { FaDatabase, FaShoppingCart, FaUserFriends } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { FaGear } from "react-icons/fa6";
+import { DadosLoja } from "./components/DadosLoja";
 
 export const Config = () => {
   const navigate = useNavigate();
@@ -83,15 +84,7 @@ export const Config = () => {
 
         {/* Área Central / Conteúdo da Aba */}
         <div className="flex-1 overflow-y-auto p-8">
-          {abaAtiva === "loja" && (
-            <div>
-              <h1 className="text-xl font-bold text-gray-800">Dados da Loja</h1>
-              <p className="text-xs text-gray-400 mt-1">
-                Informações exibidas nos cupons e relatórios.
-              </p>
-              {/* Seus cards e formulários de loja entram aqui */}
-            </div>
-          )}
+          {abaAtiva === "loja" && <DadosLoja />}
 
           {abaAtiva === "caixa" && (
             <div>
