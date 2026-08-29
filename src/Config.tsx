@@ -4,6 +4,7 @@ import { FaDatabase, FaShoppingCart, FaUserFriends } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { FaGear } from "react-icons/fa6";
 import { DadosLoja } from "./components/DadosLoja";
+import { ConfigSystem } from "./components/ConfigSystem";
 
 export const Config = () => {
   const navigate = useNavigate();
@@ -108,14 +109,7 @@ export const Config = () => {
             </div>
           )}
 
-          {abaAtiva === "sistema" && (
-            <div>
-              <h1 className="text-xl font-bold text-gray-800">Sistema</h1>
-              <p className="text-xs text-gray-400 mt-1">
-                Versão, backup e configurações gerais.
-              </p>
-            </div>
-          )}
+          {abaAtiva === "sistema" && <ConfigSystem />}
         </div>
       </div>
     </main>

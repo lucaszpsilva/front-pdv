@@ -5,8 +5,8 @@ export const DadosLoja = () => {
       <p className="text-xs text-gray-400 mt-1">
         Informações exibidas nos cupons e relatórios.
       </p>
-      <div className="px-5 w-2/4 h-63 mt-2 bg-white border-gray-400 border font-semibold rounded-lg shadow-2xl ">
-        <h1 className="mt-2 text-gray-400 tracking-wide font-semibold text-sm">
+      <div className="px-5 w-2/4 h-63 mt-2 bg-white border-gray-200 border font-semibold rounded-lg shadow-2xl ">
+        <h1 className="mt-2 text-gray-500 border-b text-center tracking-wide font-semibold text-sm">
           IDENTIFICAÇÃO:
         </h1>
 
@@ -55,8 +55,8 @@ export const DadosLoja = () => {
           </label>
         </div>
       </div>
-      <div className="px-5 w-2/4 h-44 mt-2 bg-white border-gray-400 border font-semibold rounded-lg shadow-2xl">
-        <h1 className="mt-2 text-gray-400 tracking-wide font-semibold text-sm">
+      <div className="px-5 w-2/4 h-44 mt-2 bg-white border-gray-200 border font-semibold rounded-lg shadow-2xl">
+        <h1 className="mt-2 text-gray-500 text-sm border-b text-center tracking-wide font-semibold">
           ENDEREÇO:
         </h1>
 
