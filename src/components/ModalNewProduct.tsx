@@ -44,7 +44,7 @@ export const ModalNewProduct = ({
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm p-4">
       <div className="bg-white w-full max-w-lg rounded-2xl shadow-2xl border border-gray-100 p-6 flex flex-col gap-4">
         <div className="flex items-center justify-between border-b pb-3">
-          <h3 className="text-lg font-bold text-gray-800">
+          <h3 className="text-lg font-bold text-gray-800 mx-auto">
             Cadastrar Novo Produto
           </h3>
           <button
