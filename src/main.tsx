@@ -7,6 +7,7 @@ import { App } from "./App";
 import { Products } from "./Products";
 import { Suporte } from "./Suporte";
 import { Config } from "./Config";
+import { NewProduct } from "./NewProduct";
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>

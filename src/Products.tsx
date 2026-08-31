@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import "./App.css";
 import { useNavigate } from "react-router-dom";
 import { LeitorProdutos } from "./components/LeitorProdutos";
+import { ModalNewProduct } from "./components/ModalNewProduct";
 
 export interface Produto {
   id: number;
@@ -88,6 +89,12 @@ export const Products = () => {
     setResultadoPesquisa((prev) => prev.filter((p) => p.id !== id));
   };
 
+  const [modalAberto, setModalAberto] = useState(false);
+
+  const handleSalvarProduto = (novoItem: Produto) => {
+    setProdutos((prev) => [...prev, novoItem]);
+  };
+
   return (
     <main className="w-screen h-screen bg-gray-50 flex flex-col justify-between p-6 select-none overflow-hidden">
       {/* Header Superior */}
@@ -105,6 +112,15 @@ export const Products = () => {
               #{produtos.length.toString().padStart(4, "0")}
             </span>
           </h2>
+        </div>
+
+        <div className="flex ml-auto">
+          <button
+            onClick={() => setModalAberto(true)}
+            className="w-30 pb-1 text-center border rounded-lg text-white bg-emerald-500 hover:bg-emerald-600 cursor-pointer"
+          >
+            <span className="font-bold text-xs">+ Novo Produto</span>{" "}
+          </button>
         </div>
 
         <div className="flex items-center ml-auto gap-4">
@@ -199,6 +215,12 @@ export const Products = () => {
           </tbody>
         </table>
       </section>
+      {/* Componente do Modal Isolado */}
+      <ModalNewProduct
+        isOpen={modalAberto}
+        onClose={() => setModalAberto(false)}
+        onSalvar={handleSalvarProduto}
+      />
     </main>
   );
 };
