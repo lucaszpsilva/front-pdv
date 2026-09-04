@@ -1,11 +1,10 @@
 import "./App.css";
-import { useState, useEffect } from "react";
 import { WebviewWindow } from "@tauri-apps/api/webviewWindow";
 import { useNavigate } from "react-router-dom";
+import { useRelogio } from "./hooks/useRelogio";
 
 export const Index = () => {
-  const [dataAtual, setDataAtual] = useState(new Date());
-
+  const { dataFormatada, horaFormatada } = useRelogio();
   const navigate = useNavigate();
 
   // ✅ Função para o Produtos (F2)
@@ -23,22 +22,6 @@ export const Index = () => {
       resizable: true,
     });
   };
-
-  // Relógio
-  useEffect(() => {
-    const timer = setInterval(() => setDataAtual(new Date()), 1000);
-    return () => clearInterval(timer);
-  }, []);
-
-  const formatadorData = new Intl.DateTimeFormat("pt-BR", {
-    weekday: "long",
-    day: "2-digit",
-    month: "long",
-  });
-
-  const dataBruta = formatadorData.format(dataAtual);
-  const dataFormatada = dataBruta.charAt(0).toUpperCase() + dataBruta.slice(1);
-  const horaFormatada = dataAtual.toLocaleTimeString("pt-BR");
 
   return (
     <main className="w-screen h-screen bg-gray-50 flex flex-col justify-between p-6 select-none overflow-hidden">
@@ -189,7 +172,7 @@ export const Index = () => {
             </div>
           </button>
 
-          {/* Botão Configurações com onClick correto */}
+          {/* Botão Configurações */}
           <button
             onClick={() => navigate("/configuracoes")}
             className="group h-36 rounded-2xl bg-white hover:bg-gray-150 border border-gray-200 hover:border-gray-300 p-5 flex flex-col justify-between text-left shadow-xs hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 cursor-pointer"

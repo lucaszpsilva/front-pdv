@@ -1,20 +1,37 @@
 import { useState, useEffect } from "react";
 import "./App.css";
 import { useNavigate } from "react-router-dom";
+import { useRelogio } from "./hooks/useRelogio";
+import { toast, ToastContainer } from "./components/Toast";
+import { ModalConfirmacao } from "./components/ModalConfirmacao";
+import { ModalEditarProduto } from "./components/ModalEditarProduto";
 import { LeitorProdutos } from "./components/LeitorProdutos";
 import { ModalNewProduct } from "./components/ModalNewProduct";
 import {
   Produto,
   listarProdutos,
   desativarProduto,
+  atualizarProduto,
 } from "./services/productService";
 
 export const Products = () => {
-  const [dataAtual, setDataAtual] = useState(new Date());
+  const { dataFormatada, horaFormatada } = useRelogio();
   const [produtos, setProdutos] = useState<Produto[]>([]);
   const [resultadoPesquisa, setResultadoPesquisa] = useState<Produto[]>([]);
   const [modalAberto, setModalAberto] = useState(false);
   const [carregando, setCarregando] = useState(true);
+
+  // Estado para modal de confirmação de exclusão
+  const [confirmacaoAberta, setConfirmacaoAberta] = useState(false);
+  const [produtoParaExcluir, setProdutoParaExcluir] = useState<number | null>(
+    null,
+  );
+
+  // Estado para modal de edição
+  const [editarAberto, setEditarAberto] = useState(false);
+  const [produtoParaEditar, setProdutoParaEditar] = useState<Produto | null>(
+    null,
+  );
 
   const navigate = useNavigate();
 
@@ -27,6 +44,7 @@ export const Products = () => {
       setResultadoPesquisa(lista);
     } catch (error) {
       console.error("Erro ao carregar dados do SQLite:", error);
+      toast("erro", "Erro ao carregar produtos do banco de dados!");
     } finally {
       setCarregando(false);
     }
@@ -36,22 +54,6 @@ export const Products = () => {
   useEffect(() => {
     carregarProdutosDoBanco();
   }, []);
-
-  // Relógio
-  useEffect(() => {
-    const timer = setInterval(() => setDataAtual(new Date()), 1000);
-    return () => clearInterval(timer);
-  }, []);
-
-  const formatadorData = new Intl.DateTimeFormat("pt-BR", {
-    weekday: "long",
-    day: "2-digit",
-    month: "long",
-  });
-
-  const dataBruta = formatadorData.format(dataAtual);
-  const dataFormatada = dataBruta.charAt(0).toUpperCase() + dataBruta.slice(1);
-  const horaFormatada = dataAtual.toLocaleTimeString("pt-BR");
 
   const handlePesquisar = (termoBusca: string) => {
     if (!termoBusca.trim()) {
@@ -66,7 +68,7 @@ export const Products = () => {
     );
 
     if (filtrados.length === 0) {
-      alert("Nenhum produto encontrado!");
+      toast("info", "Nenhum produto encontrado!");
       return;
     }
 
@@ -74,26 +76,42 @@ export const Products = () => {
   };
 
   const handleEditar = (produto: Produto) => {
-    console.log("Editar produto:", produto);
+    setProdutoParaEditar(produto);
+    setEditarAberto(true);
   };
 
-  const handleDeletar = async (id?: number) => {
+  const handleSalvarEdicao = async (produto: Produto) => {
+    await atualizarProduto(produto);
+    toast("sucesso", `Produto "${produto.nome}" atualizado com sucesso!`);
+    await carregarProdutosDoBanco();
+  };
+
+  const confirmarExclusao = (id?: number) => {
     if (!id) return;
-    const confirmacao = window.confirm(
-      "Deseja realmente excluir este produto?",
-    );
-    if (!confirmacao) return;
+    setProdutoParaExcluir(id);
+    setConfirmacaoAberta(true);
+  };
+
+  const handleDeletar = async () => {
+    if (!produtoParaExcluir) return;
 
     try {
-      await desativarProduto(id);
-      await carregarProdutosDoBanco(); // Atualiza a lista lendo o banco
+      await desativarProduto(produtoParaExcluir);
+      toast("sucesso", "Produto excluído com sucesso!");
+      await carregarProdutosDoBanco();
     } catch (error) {
       console.error("Erro ao deletar produto:", error);
+      toast("erro", "Erro ao excluir produto!");
+    } finally {
+      setConfirmacaoAberta(false);
+      setProdutoParaExcluir(null);
     }
   };
 
   return (
     <main className="w-screen h-screen bg-gray-50 flex flex-col justify-between p-6 select-none overflow-hidden">
+      <ToastContainer />
+
       {/* Header Superior */}
       <header className="h-12 flex border-b border-gray-300 bg-white items-center px-4 shrink-0 rounded-xl">
         <div className="flex items-center">
@@ -199,7 +217,7 @@ export const Products = () => {
                       </button>
 
                       <button
-                        onClick={() => handleDeletar(prod.id)}
+                        onClick={() => confirmarExclusao(prod.id)}
                         title="Excluir Produto"
                         className="p-1.5 text-gray-500 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors cursor-pointer"
                       >
@@ -226,11 +244,37 @@ export const Products = () => {
         )}
       </section>
 
-      {/* Modal Conectado */}
+      {/* Modal de Novo Produto */}
       <ModalNewProduct
         isOpen={modalAberto}
         onClose={() => setModalAberto(false)}
         onSalvar={carregarProdutosDoBanco}
+      />
+
+      {/* Modal de Edição */}
+      <ModalEditarProduto
+        isOpen={editarAberto}
+        produto={produtoParaEditar}
+        onClose={() => {
+          setEditarAberto(false);
+          setProdutoParaEditar(null);
+        }}
+        onSalvar={handleSalvarEdicao}
+      />
+
+      {/* Modal de Confirmação de Exclusão */}
+      <ModalConfirmacao
+        isOpen={confirmacaoAberta}
+        titulo="Excluir Produto"
+        mensagem="Deseja realmente excluir este produto? Esta ação não pode ser desfeita."
+        confirmarTexto="Sim, Excluir"
+        cancelarTexto="Cancelar"
+        tipo="perigo"
+        onConfirmar={handleDeletar}
+        onCancelar={() => {
+          setConfirmacaoAberta(false);
+          setProdutoParaExcluir(null);
+        }}
       />
     </main>
   );

@@ -1,18 +1,19 @@
-import { useState } from "react";
-import { criarProduto } from "../services/productService";
-import { toast } from "./Toast";
+import { useState, useEffect } from "react";
+import { Produto } from "../services/productService";
 
-interface ModalNewProductProps {
+interface ModalEditarProdutoProps {
   isOpen: boolean;
+  produto: Produto | null;
   onClose: () => void;
-  onSalvar: () => Promise<void>;
+  onSalvar: (produto: Produto) => Promise<void>;
 }
 
-export const ModalNewProduct = ({
+export function ModalEditarProduto({
   isOpen,
+  produto,
   onClose,
   onSalvar,
-}: ModalNewProductProps) => {
+}: ModalEditarProdutoProps) {
   const [ean, setEan] = useState("");
   const [nome, setNome] = useState("");
   const [tipo, setTipo] = useState("UN");
@@ -22,15 +23,28 @@ export const ModalNewProduct = ({
   const [ncm, setNcm] = useState("");
   const [salvando, setSalvando] = useState(false);
 
-  if (!isOpen) return null;
+  useEffect(() => {
+    if (produto) {
+      setEan(produto.ean);
+      setNome(produto.nome);
+      setTipo(produto.tipo || "UN");
+      setPrecoCusto(String(produto.preco_custo || 0));
+      setPrecoVenda(String(produto.preco_venda || 0));
+      setEstoque(String(produto.estoque || 0));
+      setNcm(produto.ncm || "");
+    }
+  }, [produto]);
+
+  if (!isOpen || !produto) return null;
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!nome.trim() || !ean.trim() || !precoVenda) return;
+    if (!nome.trim() || !ean.trim()) return;
 
     setSalvando(true);
     try {
-      await criarProduto({
+      await onSalvar({
+        ...produto,
         ean: ean.trim(),
         nome: nome.trim(),
         tipo,
@@ -39,22 +53,9 @@ export const ModalNewProduct = ({
         estoque: Number(estoque) || 0,
         ncm: ncm.trim(),
       });
-
-      toast("sucesso", `Produto "${nome.trim()}" cadastrado com sucesso!`);
-
-      // Limpa os campos e fecha
-      setEan("");
-      setNome("");
-      setTipo("UN");
-      setPrecoCusto("");
-      setPrecoVenda("");
-      setEstoque("");
-      setNcm("");
       onClose();
-      await onSalvar(); // Recarrega a lista
     } catch (error) {
-      console.error("Erro ao cadastrar produto:", error);
-      toast("erro", "Erro ao cadastrar produto! Verifique se o código já existe.");
+      console.error("Erro ao salvar produto:", error);
     } finally {
       setSalvando(false);
     }
@@ -65,7 +66,7 @@ export const ModalNewProduct = ({
       <div className="bg-white w-full max-w-lg rounded-2xl shadow-2xl border border-gray-100 p-6 flex flex-col gap-4">
         <div className="flex items-center justify-between border-b pb-3">
           <h3 className="text-lg font-bold text-gray-800 mx-auto">
-            Cadastrar Novo Produto
+            Editar Produto
           </h3>
           <button
             onClick={onClose}
@@ -88,7 +89,6 @@ export const ModalNewProduct = ({
                 className="w-full h-10 px-3 border rounded-lg mt-1 outline-none focus:border-emerald-500"
                 placeholder="Ex: 7891000100103"
                 required
-                autoFocus
               />
             </div>
             <div>
@@ -152,7 +152,7 @@ export const ModalNewProduct = ({
             </div>
             <div>
               <label className="text-xs font-semibold text-gray-600">
-                Estoque Inicial
+                Estoque
               </label>
               <input
                 type="number"
@@ -189,11 +189,11 @@ export const ModalNewProduct = ({
               disabled={salvando}
               className="px-4 py-2 bg-emerald-500 hover:bg-emerald-600 disabled:bg-gray-300 text-white text-sm font-bold rounded-lg shadow-sm cursor-pointer disabled:cursor-not-allowed"
             >
-              {salvando ? "Salvando..." : "Salvar Produto"}
+              {salvando ? "Salvando..." : "Salvar Alterações"}
             </button>
           </div>
         </form>
       </div>
     </div>
   );
-};
+}

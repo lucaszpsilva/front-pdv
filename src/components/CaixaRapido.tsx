@@ -1,7 +1,7 @@
-import { testeProduto } from "../App";
+import { Produto } from "../services/productService";
 
 interface CaixaRapidoProps {
-  produtos: testeProduto[];
+  produtos: Produto[];
   onDeletar: (id: number) => void;
 }
 
@@ -50,21 +50,21 @@ export const CaixaRapido = ({ produtos, onDeletar }: CaixaRapidoProps) => {
                 {index + 1}
               </div>
               <div className="col-span-6 flex flex-col">
-                <span className="font-medium text-slate-800">{item.name}</span>
-                <span className="text-xs text-slate-400">{item.barCode}</span>
+                <span className="font-medium text-slate-800">{item.nome}</span>
+                <span className="text-xs text-slate-400">{item.ean}</span>
               </div>
               <div className="col-span-2 text-center text-slate-600">
-                {item.qtd}
+                {item.estoque}
               </div>
               <div className="col-span-3 text-right text-slate-600">
-                R$ {item.unid.toFixed(2)}
+                R$ {item.preco_venda.toFixed(2)}
               </div>
               <div className="col-span-3 text-right font-semibold text-slate-800">
-                R$ {item.total.toFixed(2)}
+                R$ {(item.preco_venda * (item.estoque || 0)).toFixed(2)}
               </div>
               <div className="col-span-1 flex justify-end">
                 <button
-                  onClick={() => onDeletar(item.id)}
+                  onClick={() => onDeletar(item.id!)}
                   className="p-1.5 text-slate-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition cursor-pointer"
                   title="Remover item"
                 >
@@ -111,9 +111,17 @@ export const CaixaRapido = ({ produtos, onDeletar }: CaixaRapidoProps) => {
         </div>
 
         <div className="text-slate-400">
-          Códigos de teste:{" "}
-          <span className="font-mono text-slate-500">7891000315507</span> ·{" "}
-          <span className="font-mono text-slate-500">7891910000197</span>
+          {produtos.length > 0 && (
+            <span className="font-medium text-slate-600">
+              Total: R${" "}
+              {produtos
+                .reduce(
+                  (acc, item) => acc + item.preco_venda * (item.estoque || 0),
+                  0,
+                )
+                .toFixed(2)}
+            </span>
+          )}
         </div>
       </div>
     </div>
