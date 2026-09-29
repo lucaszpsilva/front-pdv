@@ -1,32 +1,29 @@
 import Database from "@tauri-apps/plugin-sql";
 
-let dbInstance: Database | null = null;
+let db: Database | null = null;
 
 export async function getDatabase(): Promise<Database> {
-  if (!dbInstance) {
-    // Abre ou cria o banco pdv.db
-    dbInstance = await Database.load("sqlite:pdv.db");
-    await initDatabase(dbInstance);
-  }
-  return dbInstance;
-}
+  if (db) return db;
 
-async function initDatabase(db: Database) {
-  // Criação da tabela de produtos com suporte fiscal e soft delete
+  // Conecta ao banco SQLite local (cria automaticamente se não existir)
+  db = await Database.load("sqlite:frontpdv.db");
+
+  // Cria a tabela de produtos (se não existir)
   await db.execute(`
     CREATE TABLE IF NOT EXISTS produtos (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       ean TEXT NOT NULL UNIQUE,
       nome TEXT NOT NULL,
-      tipo TEXT NOT NULL DEFAULT 'UN',
-      preco_custo REAL NOT NULL DEFAULT 0,
-      preco_venda REAL NOT NULL DEFAULT 0,
-      estoque REAL NOT NULL DEFAULT 0,
-      ncm TEXT,
-      cst_cfop TEXT,
-      ativo INTEGER NOT NULL DEFAULT 1,
-      created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-      updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
-    );
+      tipo TEXT DEFAULT 'UN',
+      preco_custo REAL DEFAULT 0,
+      preco_venda REAL DEFAULT 0,
+      estoque REAL DEFAULT 0,
+      ncm TEXT DEFAULT '',
+      ativo INTEGER DEFAULT 1,
+      criado_em TEXT DEFAULT (datetime('now', 'localtime')),
+      atualizado_em TEXT DEFAULT (datetime('now', 'localtime'))
+    )
   `);
+
+  return db;
 }

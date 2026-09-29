@@ -54,7 +54,10 @@ export const ModalNewProduct = ({
       await onSalvar(); // Recarrega a lista
     } catch (error) {
       console.error("Erro ao cadastrar produto:", error);
-      toast("erro", "Erro ao cadastrar produto! Verifique se o código já existe.");
+      toast(
+        "erro",
+        "Erro ao cadastrar produto! Verifique se o código já existe.",
+      );
     } finally {
       setSalvando(false);
     }
@@ -104,6 +107,7 @@ export const ModalNewProduct = ({
                 <option value="KG">Quilograma (KG)</option>
                 <option value="LT">Litro (LT)</option>
                 <option value="MT">Metro (MT)</option>
+                <option value="PCT">Pacote (PCT)</option>
               </select>
             </div>
           </div>

@@ -5,10 +5,7 @@ import { ResumoVenda } from "./components/ResumoVenda";
 import { CaixaRapido } from "./components/CaixaRapido";
 import { useRelogio } from "./hooks/useRelogio";
 import { toast, ToastContainer } from "./components/Toast";
-import {
-  Produto,
-  listarProdutos,
-} from "./services/productService";
+import { Produto, listarProdutos } from "./services/productService";
 
 export const App = () => {
   const { dataFormatada, horaFormatada } = useRelogio();
@@ -53,9 +50,7 @@ export const App = () => {
     if (existente && existente.id) {
       setItensVenda((prev) =>
         prev.map((p) =>
-          p.id === existente.id
-            ? { ...p, estoque: (p.estoque || 0) + 1 }
-            : p,
+          p.id === existente.id ? { ...p, estoque: (p.estoque || 0) + 1 } : p,
         ),
       );
       toast("sucesso", `+1 ${produtoEncontrado.nome}`);
