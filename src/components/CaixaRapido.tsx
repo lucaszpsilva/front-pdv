@@ -1,4 +1,5 @@
 import { Produto } from "../services/productService";
+import { useReturn } from "../hooks/useReturn";
 
 interface CaixaRapidoProps {
   produtos: Produto[];
@@ -6,6 +7,7 @@ interface CaixaRapidoProps {
 }
 
 export const CaixaRapido = ({ produtos, onDeletar }: CaixaRapidoProps) => {
+  useReturn();
   return (
     <div className="flex-1 bg-white border border-gray-200 rounded-2xl flex flex-col justify-between overflow-hidden shadow-sm">
       <div className="bg-slate-50 border-b border-gray-200 px-6 py-3 grid grid-cols-16 gap-2 text-xs font-semibold text-slate-400 tracking-wider uppercase">
@@ -106,7 +108,7 @@ export const CaixaRapido = ({ produtos, onDeletar }: CaixaRapidoProps) => {
             <span className="px-1.5 py-0.5 bg-slate-200 text-slate-600 font-medium rounded border border-slate-300 text-[10px]">
               Esc
             </span>
-            <span>Cancelar</span>
+            <span>Cancelar / Sair</span>
           </div>
         </div>
 
