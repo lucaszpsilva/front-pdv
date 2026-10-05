@@ -2,6 +2,7 @@ import "./App.css";
 import { WebviewWindow } from "@tauri-apps/api/webviewWindow";
 import { useNavigate } from "react-router-dom";
 import { useRelogio } from "./hooks/useRelogio";
+import { useCloseApp } from "./hooks/useCloseApp";
 
 export const Index = () => {
   const { dataFormatada, horaFormatada } = useRelogio();
@@ -23,6 +24,7 @@ export const Index = () => {
     });
   };
 
+  useCloseApp();
   return (
     <main className="w-screen h-screen bg-gray-50 flex flex-col justify-between p-6 select-none overflow-hidden">
       {/* Header Superior */}

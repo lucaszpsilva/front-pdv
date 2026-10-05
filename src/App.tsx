@@ -6,13 +6,21 @@ import { CaixaRapido } from "./components/CaixaRapido";
 import { useRelogio } from "./hooks/useRelogio";
 import { toast, ToastContainer } from "./components/Toast";
 import { Produto, listarProdutos } from "./services/productService";
+import type { FormaPagamento } from "./types/pagamento";
 
 export const App = () => {
   const { dataFormatada, horaFormatada } = useRelogio();
   const [produtos, setProdutos] = useState<Produto[]>([]);
   const [itensVenda, setItensVenda] = useState<Produto[]>([]);
+  const [formaPagamento, setFormaPagamento] = useState<FormaPagamento | null>(
+    null,
+  );
 
-  // Carrega produtos do banco ao abrir a tela
+  const total = itensVenda.reduce(
+    (acc, item) => acc + item.preco_venda * (item.estoque || 0),
+    0,
+  );
+
   useEffect(() => {
     carregarProdutos();
   }, []);
@@ -27,14 +35,12 @@ export const App = () => {
     }
   };
 
-  // Função para deletar item da venda
   const handleDeletarProduto = (idParaDeletar: number) => {
     setItensVenda((atuais) =>
       atuais.filter((item) => item.id !== idParaDeletar),
     );
   };
 
-  // Função para adicionar item pelo leitor
   const handleAdicionarProduto = (codigoLido: number) => {
     const produtoEncontrado = produtos.find(
       (p) => Number(p.ean) === codigoLido,
@@ -45,7 +51,6 @@ export const App = () => {
       return;
     }
 
-    // Verifica se o produto já está na lista e incrementa quantidade
     const existente = itensVenda.find((p) => p.ean === produtoEncontrado.ean);
     if (existente && existente.id) {
       setItensVenda((prev) =>
@@ -57,10 +62,9 @@ export const App = () => {
       return;
     }
 
-    // Adiciona novo item com quantidade 1
     const novoItem: Produto = {
       ...produtoEncontrado,
-      estoque: 1, // Usamos estoque como quantidade na venda
+      estoque: 1,
     };
 
     setItensVenda((prev) => [...prev, novoItem]);
@@ -89,10 +93,19 @@ export const App = () => {
       <div className="flex-1 grid grid-cols-12 gap-4 p-4 overflow-hidden">
         <section className="col-span-8 lg:col-span-9 flex flex-col h-full gap-4">
           <Leitor onAdicionar={handleAdicionarProduto} />
-          <CaixaRapido produtos={itensVenda} onDeletar={handleDeletarProduto} />
+          <CaixaRapido
+            produtos={itensVenda}
+            onDeletar={handleDeletarProduto}
+            total={total}
+          />
         </section>
 
-        <ResumoVenda />
+        <ResumoVenda
+          formaPagamento={formaPagamento}
+          onSelecionarForma={setFormaPagamento}
+          subtotal={total}
+          total={total}
+        />
       </div>
     </main>
   );

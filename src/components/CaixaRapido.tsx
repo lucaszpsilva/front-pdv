@@ -1,13 +1,20 @@
 import { Produto } from "../services/productService";
 import { useReturn } from "../hooks/useReturn";
+import { formatarMoeda } from "../utils/format";
 
 interface CaixaRapidoProps {
   produtos: Produto[];
   onDeletar: (id: number) => void;
+  total: number;
 }
 
-export const CaixaRapido = ({ produtos, onDeletar }: CaixaRapidoProps) => {
+export const CaixaRapido = ({
+  produtos,
+  onDeletar,
+  total,
+}: CaixaRapidoProps) => {
   useReturn();
+
   return (
     <div className="flex-1 bg-white border border-gray-200 rounded-2xl flex flex-col justify-between overflow-hidden shadow-sm">
       <div className="bg-slate-50 border-b border-gray-200 px-6 py-3 grid grid-cols-16 gap-2 text-xs font-semibold text-slate-400 tracking-wider uppercase">
@@ -59,10 +66,10 @@ export const CaixaRapido = ({ produtos, onDeletar }: CaixaRapidoProps) => {
                 {item.estoque}
               </div>
               <div className="col-span-3 text-right text-slate-600">
-                R$ {item.preco_venda.toFixed(2)}
+                {formatarMoeda(item.preco_venda)}
               </div>
               <div className="col-span-3 text-right font-semibold text-slate-800">
-                R$ {(item.preco_venda * (item.estoque || 0)).toFixed(2)}
+                {formatarMoeda(item.preco_venda * (item.estoque || 0))}
               </div>
               <div className="col-span-1 flex justify-end">
                 <button
@@ -115,13 +122,7 @@ export const CaixaRapido = ({ produtos, onDeletar }: CaixaRapidoProps) => {
         <div className="text-slate-400">
           {produtos.length > 0 && (
             <span className="font-medium text-slate-600">
-              Total: R${" "}
-              {produtos
-                .reduce(
-                  (acc, item) => acc + item.preco_venda * (item.estoque || 0),
-                  0,
-                )
-                .toFixed(2)}
+              Total: {formatarMoeda(total)}
             </span>
           )}
         </div>
