@@ -9,6 +9,7 @@ export interface Produto {
   preco_venda: number;
   estoque: number;
   ncm: string;
+  peso_gramas: number;
   ativo?: number;
   criado_em?: string;
   atualizado_em?: string;
@@ -28,8 +29,8 @@ export async function criarProduto(
 ): Promise<void> {
   const db = await getDatabase();
   await db.execute(
-    `INSERT INTO produtos (ean, nome, tipo, preco_custo, preco_venda, estoque, ncm)
-     VALUES ($1, $2, $3, $4, $5, $6, $7)`,
+    `INSERT INTO produtos (ean, nome, tipo, preco_custo, preco_venda, estoque, ncm, peso_gramas)
+     VALUES ($1, $2, $3, $4, $5, $6, $7, $8)`,
     [
       produto.ean,
       produto.nome,
@@ -38,6 +39,7 @@ export async function criarProduto(
       produto.preco_venda,
       produto.estoque,
       produto.ncm,
+      produto.peso_gramas,
     ],
   );
 }
@@ -47,9 +49,9 @@ export async function atualizarProduto(produto: Produto): Promise<void> {
   const db = await getDatabase();
   await db.execute(
     `UPDATE produtos SET ean = $1, nome = $2, tipo = $3, preco_custo = $4,
-     preco_venda = $5, estoque = $6, ncm = $7,
+     preco_venda = $5, estoque = $6, ncm = $7, peso_gramas = $8,
      atualizado_em = datetime('now', 'localtime')
-     WHERE id = $8`,
+     WHERE id = $9`,
     [
       produto.ean,
       produto.nome,
@@ -58,6 +60,7 @@ export async function atualizarProduto(produto: Produto): Promise<void> {
       produto.preco_venda,
       produto.estoque,
       produto.ncm,
+      produto.peso_gramas,
       produto.id,
     ],
   );

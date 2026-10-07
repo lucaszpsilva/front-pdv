@@ -21,6 +21,7 @@ export async function getDatabase(): Promise<Database> {
       preco_venda REAL DEFAULT 0,
       estoque REAL DEFAULT 0,
       ncm TEXT DEFAULT '',
+      peso_gramas INTEGER DEFAULT 0,
       ativo INTEGER DEFAULT 1,
       criado_em TEXT DEFAULT (datetime('now', 'localtime')),
       atualizado_em TEXT DEFAULT (datetime('now', 'localtime'))
