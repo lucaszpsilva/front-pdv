@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import type { DadosDaLoja } from "../services/lojaService";
 import { buscarDadosDaLoja, salvarDadosLoja } from "../services/lojaService";
-import { toast } from "./Toast";
+import { toast, ToastContainer } from "./Toast";
 
 export const DadosLoja = () => {
   const [loja, setLoja] = useState<DadosDaLoja>({
@@ -175,6 +175,7 @@ export const DadosLoja = () => {
           ✓ Salvar Alterações
         </button>
       </div>
+      <ToastContainer />
     </div>
   );
 };

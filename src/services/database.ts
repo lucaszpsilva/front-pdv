@@ -124,7 +124,7 @@ export async function getDatabase(): Promise<Database> {
   await db.execute(`
     CREATE TABLE IF NOT EXISTS dados_loja (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
-      name TEXT NOT NULL,
+      nome TEXT NOT NULL,
       cnpj TEXT NOT NULL,
       telefone TEXT,
       email TEXT,
