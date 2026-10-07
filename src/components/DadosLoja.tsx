@@ -1,4 +1,48 @@
+import { useState, useEffect } from "react";
+import type { DadosDaLoja } from "../services/lojaService";
+import { buscarDadosDaLoja, salvarDadosLoja } from "../services/lojaService";
+import { toast } from "./Toast";
+
 export const DadosLoja = () => {
+  const [loja, setLoja] = useState<DadosDaLoja>({
+    nome: "",
+    cnpj: "",
+    telefone: "",
+    email: "",
+    logradouro: "",
+    cidade: "",
+    estado: "",
+    cep: "",
+  });
+
+  // Carrega os dados do banco quando a tela monta
+  useEffect(() => {
+    const carregar = async () => {
+      try {
+        const dados = await buscarDadosDaLoja();
+        if (dados) {
+          setLoja(dados);
+        }
+      } catch (erro) {
+        console.error(erro);
+        toast("erro", "Erro ao carregar dados da loja");
+      }
+    };
+
+    carregar();
+  }, []);
+
+  // Salva os dados quando clica no botão
+  const handleSalvar = async () => {
+    try {
+      await salvarDadosLoja(loja);
+      toast("sucesso", "Dados salvos com sucesso!");
+    } catch (erro) {
+      console.error(erro);
+      toast("erro", "Erro ao salvar dados da loja");
+    }
+  };
+
   return (
     <div>
       <h1 className="text-xl font-bold text-gray-800">Dados da Loja</h1>
@@ -15,6 +59,8 @@ export const DadosLoja = () => {
         </div>
         <label>
           <input
+            value={loja.nome}
+            onChange={(e) => setLoja({ ...loja, nome: e.target.value })}
             type="text"
             placeholder="Loja Central"
             className="w-full mt-1 h-6 pl-3 flex border rounded text-sm text-gray-400 border-gray-400 bg-blue-50 focus:outline-0 focus:ring-0"
@@ -26,6 +72,8 @@ export const DadosLoja = () => {
               <span> CNPJ</span>
               <label>
                 <input
+                  value={loja.cnpj}
+                  onChange={(e) => setLoja({ ...loja, cnpj: e.target.value })}
                   type="text"
                   placeholder="99.999.999/0001-09"
                   className="w-full mt-1 h-6 pl-3 flex border rounded text-sm border-gray-400 bg-blue-50 focus:outline-0"
@@ -36,6 +84,10 @@ export const DadosLoja = () => {
               <span>TELEFONE</span>
               <label>
                 <input
+                  value={loja.telefone}
+                  onChange={(e) =>
+                    setLoja({ ...loja, telefone: e.target.value })
+                  }
                   type="text"
                   placeholder="(11) 99999-9999"
                   className=" mt-1 h-6 pl-3 flex flex-1 border rounded text-sm border-gray-400 bg-blue-50 focus:outline-0"
@@ -48,6 +100,8 @@ export const DadosLoja = () => {
           </div>
           <label>
             <input
+              value={loja.email}
+              onChange={(e) => setLoja({ ...loja, email: e.target.value })}
               type="text"
               placeholder="contato@lojacentral.com.br"
               className="w-full mt-1 h-6 pl-3 flex border rounded text-sm text-gray-400 border-gray-400 bg-blue-50 focus:outline-0"
@@ -65,6 +119,8 @@ export const DadosLoja = () => {
         </div>
         <label>
           <input
+            value={loja.logradouro}
+            onChange={(e) => setLoja({ ...loja, logradouro: e.target.value })}
             type="text"
             placeholder="Rua das flores, 123. "
             className="w-full mt-1 h-6 pl-3 flex border rounded text-sm text-gray-400 border-gray-400 bg-blue-50 focus:outline-0 focus:ring-0"
@@ -76,6 +132,8 @@ export const DadosLoja = () => {
               <span> CIDADE</span>
               <label>
                 <input
+                  value={loja.cidade}
+                  onChange={(e) => setLoja({ ...loja, cidade: e.target.value })}
                   type="text"
                   placeholder="São Paulo"
                   className="w-full mt-1 h-6 pl-3 flex-1 border rounded text-sm border-gray-400 bg-blue-50 focus:outline-0"
@@ -86,6 +144,8 @@ export const DadosLoja = () => {
               <span>ESTADO</span>
               <label>
                 <input
+                  value={loja.estado}
+                  onChange={(e) => setLoja({ ...loja, estado: e.target.value })}
                   type="text"
                   placeholder="SP"
                   className="w-20 mt-1 h-6 pl-3 flex border rounded text-sm border-gray-400 bg-blue-50 focus:outline-0"
@@ -96,6 +156,8 @@ export const DadosLoja = () => {
               <span>CEP</span>
               <label>
                 <input
+                  value={loja.cep}
+                  onChange={(e) => setLoja({ ...loja, cep: e.target.value })}
                   type="text"
                   placeholder="99999-999"
                   className=" mt-1 h-6 pl-3 flex flex-1 border rounded text-sm border-gray-400 bg-blue-50 focus:outline-0"
@@ -106,7 +168,10 @@ export const DadosLoja = () => {
         </div>
       </div>
       <div className="flex w-2/4 justify-end ">
-        <button className="px-3 h-8 mt-3 border bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-transform duration-200 cursor-pointer">
+        <button
+          onClick={handleSalvar}
+          className="px-3 h-8 mt-3 border bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-transform duration-200 cursor-pointer"
+        >
           ✓ Salvar Alterações
         </button>
       </div>

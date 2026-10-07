@@ -118,5 +118,23 @@ export async function getDatabase(): Promise<Database> {
     )
   `);
 
+  // ═══════════════════════════════════════════════════════════════
+  // 7. DADOS_LOJA — Salva os dados da loja
+  // ═══════════════════════════════════════════════════════════════
+  await db.execute(`
+    CREATE TABLE IF NOT EXISTS dados_loja (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      name TEXT NOT NULL,
+      cnpj TEXT NOT NULL,
+      telefone TEXT,
+      email TEXT,
+      logradouro TEXT,
+      cidade TEXT,
+      estado TEXT,
+      cep TEXT,
+      atualizado_em TEXT DEFAULT (datetime('now', 'localtime'))
+    )
+  `);
+
   return db;
 }
