@@ -21,6 +21,7 @@ export function ModalEditarProduto({
   const [precoVenda, setPrecoVenda] = useState("");
   const [estoque, setEstoque] = useState("");
   const [ncm, setNcm] = useState("");
+  const [peso_gramas, setPeso_gramas] = useState("");
   const [salvando, setSalvando] = useState(false);
 
   useEffect(() => {
@@ -32,6 +33,7 @@ export function ModalEditarProduto({
       setPrecoVenda(String(produto.preco_venda || 0));
       setEstoque(String(produto.estoque || 0));
       setNcm(produto.ncm || "");
+      setPeso_gramas(String(produto.peso_gramas || 0));
     }
   }, [produto]);
 
@@ -52,6 +54,7 @@ export function ModalEditarProduto({
         preco_venda: Number(precoVenda) || 0,
         estoque: Number(estoque) || 0,
         ncm: ncm.trim(),
+        peso_gramas: Number(peso_gramas) || 0,
       });
       onClose();
     } catch (error) {
@@ -175,7 +178,18 @@ export function ModalEditarProduto({
               placeholder="Ex: 22021000"
             />
           </div>
-
+          <div>
+            <label className="text-xs font-semibold text-gray-600">
+              Peso (g)
+            </label>
+            <input
+              type="text"
+              value={peso_gramas}
+              onChange={(e) => setPeso_gramas(e.target.value)}
+              className="w-full h-10 px-3 border rounded-lg mt-1 outline-none focus:border-emerald-500"
+              placeholder="Ex: 1250"
+            />
+          </div>
           <div className="flex justify-end gap-2 mt-4">
             <button
               type="button"

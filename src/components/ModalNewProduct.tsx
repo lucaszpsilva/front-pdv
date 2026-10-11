@@ -20,6 +20,7 @@ export const ModalNewProduct = ({
   const [precoVenda, setPrecoVenda] = useState("");
   const [estoque, setEstoque] = useState("");
   const [ncm, setNcm] = useState("");
+  const [peso_gramas, setPeso_gramas] = useState("");
   const [salvando, setSalvando] = useState(false);
 
   if (!isOpen) return null;
@@ -38,6 +39,7 @@ export const ModalNewProduct = ({
         preco_venda: Number(precoVenda) || 0,
         estoque: Number(estoque) || 0,
         ncm: ncm.trim(),
+        peso_gramas: Number(peso_gramas) || 0,
       });
 
       toast("sucesso", `Produto "${nome.trim()}" cadastrado com sucesso!`);
@@ -50,6 +52,7 @@ export const ModalNewProduct = ({
       setPrecoVenda("");
       setEstoque("");
       setNcm("");
+      setPeso_gramas("");
       onClose();
       await onSalvar(); // Recarrega a lista
     } catch (error) {
@@ -179,7 +182,18 @@ export const ModalNewProduct = ({
               placeholder="Ex: 22021000"
             />
           </div>
-
+          <div>
+            <label className="text-xs font-semibold text-gray-600">
+              Peso (g)
+            </label>
+            <input
+              type="text"
+              value={peso_gramas}
+              onChange={(e) => setPeso_gramas(e.target.value)}
+              className="w-full h-10 px-3 border rounded-lg mt-1 outline-none focus:border-emerald-500"
+              placeholder="Ex: 1250"
+            />
+          </div>
           <div className="flex justify-end gap-2 mt-4">
             <button
               type="button"

@@ -3,6 +3,42 @@ import type { DadosDaLoja } from "../services/lojaService";
 import { buscarDadosDaLoja, salvarDadosLoja } from "../services/lojaService";
 import { toast, ToastContainer } from "./Toast";
 
+export const formatarCEP = (valor: string) => {
+  // remove tudo que não for digito
+  const apenasNumeros = valor.replace(/\D/g, "").slice(0, 8);
+
+  // aplica a máscara CEP 00000-000
+  return apenasNumeros.replace(/^(\d{5})(\d)/, "$1-$2");
+};
+
+export const formatarCNPJ = (valor: string) => {
+  // remove tudo que não for digito
+  const apenasNumeros = valor.replace(/\D/g, "");
+
+  // aplica a máscara cnpj 00.000.000/0000-00
+  return apenasNumeros
+    .replace(/^(\d{2})(\d)/, "$1.$2")
+    .replace(/^(\d{2})\.(\d{3})(\d)/, "$1.$2.$3")
+    .replace(/\.(\d{3})(\d)/, ".$1/$2")
+    .replace(/(\d{4})(\d)/, "$1-$2")
+    .slice(0, 18); // Limita ao tamanho máximo do CNPJ formatado
+};
+
+export const formatarTelefone = (valor: string) => {
+  const apenasNumeros = valor.replace(/\D/g, "").slice(0, 11);
+
+  if (apenasNumeros.length <= 2) {
+    return apenasNumeros;
+  }
+  if (apenasNumeros.length <= 6) {
+    return apenasNumeros.replace(/^(\d{2})(\d+)/, "($1) $2");
+  }
+  if (apenasNumeros.length <= 10) {
+    return apenasNumeros.replace(/^(\d{2})(\d{4})(\d+)/, "($1) $2-$3");
+  }
+  return apenasNumeros.replace(/^(\d{2})(\d{5})(\d{4})/, "($1) $2-$3");
+};
+
 export const DadosLoja = () => {
   const [loja, setLoja] = useState<DadosDaLoja>({
     nome: "",
@@ -73,7 +109,9 @@ export const DadosLoja = () => {
               <label>
                 <input
                   value={loja.cnpj}
-                  onChange={(e) => setLoja({ ...loja, cnpj: e.target.value })}
+                  onChange={(e) =>
+                    setLoja({ ...loja, cnpj: formatarCNPJ(e.target.value) })
+                  }
                   type="text"
                   placeholder="99.999.999/0001-09"
                   className="w-full mt-1 h-6 pl-3 flex border rounded text-sm border-gray-400 bg-blue-50 focus:outline-0"
@@ -86,7 +124,10 @@ export const DadosLoja = () => {
                 <input
                   value={loja.telefone}
                   onChange={(e) =>
-                    setLoja({ ...loja, telefone: e.target.value })
+                    setLoja({
+                      ...loja,
+                      telefone: formatarTelefone(e.target.value),
+                    })
                   }
                   type="text"
                   placeholder="(11) 99999-9999"
@@ -157,7 +198,9 @@ export const DadosLoja = () => {
               <label>
                 <input
                   value={loja.cep}
-                  onChange={(e) => setLoja({ ...loja, cep: e.target.value })}
+                  onChange={(e) =>
+                    setLoja({ ...loja, cep: formatarCEP(e.target.value) })
+                  }
                   type="text"
                   placeholder="99999-999"
                   className=" mt-1 h-6 pl-3 flex flex-1 border rounded text-sm border-gray-400 bg-blue-50 focus:outline-0"
