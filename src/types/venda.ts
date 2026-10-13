@@ -20,8 +20,8 @@ export type Venda = {
 
 export type ItemVenda = {
   id?: number;
-  venda_id: number;
-  produto_id: number;
+  venda_id?: number;
+  produto_id?: number;
   ean: string;
   nome: string;
   tipo: string;

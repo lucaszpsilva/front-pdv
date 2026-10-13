@@ -6,6 +6,8 @@ type ResumoVendaProps = {
   onSelecionarForma: (forma: FormaPagamento) => void;
   subtotal: number;
   total: number;
+  onFinalizar: () => void;
+  finalizando: boolean;
 };
 
 const classeAtivo =
@@ -19,6 +21,8 @@ export const ResumoVenda = ({
   onSelecionarForma,
   subtotal,
   total,
+  onFinalizar,
+  finalizando,
 }: ResumoVendaProps) => {
   return (
     <aside className="col-span-4 lg:col-span-3 bg-white border border-gray-200 rounded-2xl p-4 flex flex-col">
@@ -133,8 +137,12 @@ export const ResumoVenda = ({
       </div>
 
       <div className="mt-auto">
-        <button className="px-6 h-12 mt-4 m-auto bg-emerald-500 hover:bg-emerald-600 rounded-xl font-bold text-white flex items-center justify-center gap-2 cursor-pointer transition">
-          Finalizar Venda
+        <button
+          onClick={onFinalizar}
+          disabled={finalizando}
+          className="px-6 h-12 mt-4 m-auto bg-emerald-500 hover:bg-emerald-600 disabled:bg-gray-300 disabled:cursor-not-allowed rounded-xl font-bold text-white flex items-center justify-center gap-2 cursor-pointer transition"
+        >
+          {finalizando ? "Finalizando..." : "Finalizar Venda"}
           <span className="px-2 py-0.5 text-xs font-normal rounded bg-white text-gray-500">
             F5
           </span>

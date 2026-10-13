@@ -7,6 +7,8 @@ import { useRelogio } from "./hooks/useRelogio";
 import { toast, ToastContainer } from "./components/Toast";
 import { Produto, listarProdutos } from "./services/productService";
 import type { FormaPagamento } from "./types/pagamento";
+import type { ItemVenda } from "./types/venda";
+import { criarVenda } from "./services/vendaService";
 
 export const App = () => {
   const { dataFormatada, horaFormatada } = useRelogio();
@@ -15,6 +17,7 @@ export const App = () => {
   const [formaPagamento, setFormaPagamento] = useState<FormaPagamento | null>(
     null,
   );
+  const [finalizando, setFinalizando] = useState(false);
 
   const total = itensVenda.reduce(
     (acc, item) => acc + item.preco_venda * (item.estoque || 0),
@@ -71,6 +74,59 @@ export const App = () => {
     toast("sucesso", `${produtoEncontrado.nome} adicionado!`);
   };
 
+  const handleFinalizarVenda = async () => {
+    // Validações antes de salvar
+    if (itensVenda.length === 0) {
+      toast("info", "Adicione ao menos um item para finalizar a venda.");
+      return;
+    }
+    if (!formaPagamento) {
+      toast("info", "Selecione a forma de pagamento.");
+      return;
+    }
+
+    setFinalizando(true);
+    try {
+      // Monta o array de itens no formato que o service espera
+      const itensParaSalvar: Omit<
+        ItemVenda,
+        "id" | "venda_id" | "criado_em"
+      >[] = itensVenda.map((item) => ({
+        produto_id: item.id,
+        ean: item.ean,
+        nome: item.nome,
+        tipo: item.tipo,
+        quantidade: item.estoque || 0,
+        preco_unitario: item.preco_venda,
+        preco_total: item.preco_venda * (item.estoque || 0),
+      }));
+
+      // usuario_id e caixa_id chumbados por enquanto
+      await criarVenda(
+        {
+          caixa_id: 1,
+          usuario_id: 1,
+          forma_pagamento: formaPagamento,
+          total,
+          desconto: 0,
+          desconto_tipo: "valor",
+          valor_recebido: total,
+          troco: 0,
+        },
+        itensParaSalvar,
+      );
+
+      toast("sucesso", "Venda finalizada com sucesso!");
+      setItensVenda([]);
+      setFormaPagamento(null);
+    } catch (error) {
+      console.error("Erro ao finalizar venda:", error);
+      toast("erro", "Erro ao finalizar venda. Tente novamente.");
+    } finally {
+      setFinalizando(false);
+    }
+  };
+
   return (
     <main className="bg-gray-50 w-screen h-screen flex flex-col overflow-hidden">
       <ToastContainer />
@@ -105,6 +161,8 @@ export const App = () => {
           onSelecionarForma={setFormaPagamento}
           subtotal={total}
           total={total}
+          onFinalizar={handleFinalizarVenda}
+          finalizando={finalizando}
         />
       </div>
     </main>
