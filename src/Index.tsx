@@ -3,8 +3,12 @@ import { WebviewWindow } from "@tauri-apps/api/webviewWindow";
 import { useNavigate } from "react-router-dom";
 import { useRelogio } from "./hooks/useRelogio";
 import { useCloseApp } from "./hooks/useCloseApp";
+import { ModalConfirmacao } from "./components/ModalConfirmacao";
 
 export const Index = () => {
+  const { mostrarConfirmacao, confirmarFechamento, cancelarFechamento } =
+    useCloseApp();
+
   const { dataFormatada, horaFormatada } = useRelogio();
   const navigate = useNavigate();
 
@@ -24,7 +28,6 @@ export const Index = () => {
     });
   };
 
-  useCloseApp();
   return (
     <main className="w-screen h-screen bg-gray-50 flex flex-col justify-between p-6 select-none overflow-hidden">
       {/* Header Superior */}
@@ -234,6 +237,17 @@ export const Index = () => {
         </div>
         <span>v1.0.0</span>
       </footer>
+
+      <ModalConfirmacao
+        isOpen={mostrarConfirmacao}
+        titulo="Fechar o sistema?"
+        mensagem="Tem certeza que deseja fechar o aplicativo?"
+        onConfirmar={confirmarFechamento}
+        onCancelar={cancelarFechamento}
+        confirmarTexto="Sim, fechar"
+        cancelarTexto="Cancelar"
+        tipo="perigo"
+      />
     </main>
   );
 };
