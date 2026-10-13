@@ -7,7 +7,6 @@ import { App } from "./App";
 import { Products } from "./Products";
 import { Suporte } from "./Suporte";
 import { Config } from "./Config";
-import { Usuarios } from "./components/Usuarios";
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>
@@ -22,8 +21,6 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
         <Route path="/suporte" element={<Suporte />} /> {/* Tela de Suporte */}
         <Route path="/configuracoes" element={<Config />} />{" "}
         {/* Tela das Configurações */}
-        <Route path="/usuarios" element={<Usuarios />} />
-        {/* Tela dos usuários */}
       </Routes>
     </HashRouter>
   </React.StrictMode>,

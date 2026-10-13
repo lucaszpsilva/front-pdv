@@ -68,14 +68,11 @@ export const Usuarios = () => {
   };
 
   return (
-    <div className="p-6">
+    <div className="">
       <div className="flex items-center justify-between mb-4">
-        <div>
-          <h1 className="text-xl font-bold text-gray-800">Usuários</h1>
-          <p className="text-xs text-gray-400 mt-1">
-            Cadastro de operadores e administradores
-          </p>
-        </div>
+        <h2 className="text-sm font-semibold text-gray-500">
+          Operadores e administradores
+        </h2>
         <button
           onClick={handleNovo}
           className="px-4 py-2 bg-emerald-500 hover:bg-emerald-600 text-white rounded-lg font-bold text-sm cursor-pointer transition"

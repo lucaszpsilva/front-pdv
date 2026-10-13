@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { FaGear } from "react-icons/fa6";
 import { DadosLoja } from "./components/DadosLoja";
 import { ConfigSystem } from "./components/ConfigSystem";
+import { Usuarios } from "./components/Usuarios";
 
 export const Config = () => {
   const navigate = useNavigate();
@@ -98,16 +99,7 @@ export const Config = () => {
             </div>
           )}
 
-          {abaAtiva === "usuarios" && (
-            <div>
-              <h1 className="text-xl font-bold text-gray-800">
-                Gerenciamento de Usuários
-              </h1>
-              <p className="text-xs text-gray-400 mt-1">
-                Operadores de caixa e administradores.
-              </p>
-            </div>
-          )}
+          {abaAtiva === "usuarios" && <Usuarios />}
 
           {abaAtiva === "sistema" && <ConfigSystem />}
         </div>
