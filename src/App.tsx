@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom"; // 👈 Adicionado
 import { Leitor } from "./components/Leitor";
 import "./App.css";
 import { ResumoVenda } from "./components/ResumoVenda";
@@ -10,16 +11,20 @@ import type { FormaPagamento } from "./types/pagamento";
 import type { ItemVenda } from "./types/venda";
 import { criarVenda } from "./services/vendaService";
 import { useSessao } from "./contexts/SessaoContext";
+import { ModalConfirmacao } from "./components/ModalConfirmacao"; // 👈 Adicionado
 
 export const App = () => {
   const { usuarioLogado } = useSessao();
   const { dataFormatada, horaFormatada } = useRelogio();
+  const navigate = useNavigate(); // 👈 Adicionado
+  
   const [produtos, setProdutos] = useState<Produto[]>([]);
   const [itensVenda, setItensVenda] = useState<Produto[]>([]);
-  const [formaPagamento, setFormaPagamento] = useState<FormaPagamento | null>(
-    null,
-  );
+  const [formaPagamento, setFormaPagamento] = useState<FormaPagamento | null>(null);
   const [finalizando, setFinalizando] = useState(false);
+  
+  // Estado para o modal de saída
+  const [mostrarConfirmacaoSair, setMostrarConfirmacaoSair] = useState(false); // 👈 Adicionado
 
   const total = itensVenda.reduce(
     (acc, item) => acc + item.preco_venda * (item.estoque || 0),
@@ -29,6 +34,23 @@ export const App = () => {
   useEffect(() => {
     carregarProdutos();
   }, []);
+
+  // Escuta o ESC para sair do caixa
+  useEffect(() => {
+    const handleEsc = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        if (itensVenda.length > 0) {
+          // Se tiver item, abre o modal
+          setMostrarConfirmacaoSair(true);
+        } else {
+          // Se estiver vazio, sai direto
+          navigate("/");
+        }
+      }
+    };
+    document.addEventListener("keydown", handleEsc);
+    return () => document.removeEventListener("keydown", handleEsc);
+  }, [itensVenda, navigate]); // Depende de itensVenda para saber se está vazio
 
   const carregarProdutos = async () => {
     try {
@@ -77,7 +99,6 @@ export const App = () => {
   };
 
   const handleFinalizarVenda = async () => {
-    // Validações antes de salvar
     if (itensVenda.length === 0) {
       toast("info", "Adicione ao menos um item para finalizar a venda.");
       return;
@@ -89,21 +110,17 @@ export const App = () => {
 
     setFinalizando(true);
     try {
-      // Monta o array de itens no formato que o service espera
-      const itensParaSalvar: Omit<
-        ItemVenda,
-        "id" | "venda_id" | "criado_em"
-      >[] = itensVenda.map((item) => ({
-        produto_id: item.id,
-        ean: item.ean,
-        nome: item.nome,
-        tipo: item.tipo,
-        quantidade: item.estoque || 0,
-        preco_unitario: item.preco_venda,
-        preco_total: item.preco_venda * (item.estoque || 0),
-      }));
+      const itensParaSalvar: Omit<ItemVenda, "id" | "venda_id" | "criado_em">[] =
+        itensVenda.map((item) => ({
+          produto_id: item.id,
+          ean: item.ean,
+          nome: item.nome,
+          tipo: item.tipo,
+          quantidade: item.estoque || 0,
+          preco_unitario: item.preco_venda,
+          preco_total: item.preco_venda * (item.estoque || 0),
+        }));
 
-      // usuario_id e caixa_id chumbados por enquanto
       await criarVenda(
         {
           caixa_id: 1,
@@ -171,6 +188,18 @@ export const App = () => {
           finalizando={finalizando}
         />
       </div>
+
+      {/* Modal de confirmação de saída */}
+      <ModalConfirmacao
+        isOpen={mostrarConfirmacaoSair}
+        titulo="Sair do caixa?"
+        mensagem="Existem itens na venda atual. Se você sair agora, a venda será perdida."
+        onConfirmar={() => navigate("/")}
+        onCancelar={() => setMostrarConfirmacaoSair(false)}
+        confirmarTexto="Sim, sair"
+        cancelarTexto="Continuar vendendo"
+        tipo="perigo"
+      />
     </main>
   );
 };
