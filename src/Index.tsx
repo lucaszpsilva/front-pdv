@@ -6,8 +6,22 @@ import { useCloseApp } from "./hooks/useCloseApp";
 import { ModalConfirmacao } from "./components/ModalConfirmacao";
 import { useSessao } from "./contexts/SessaoContext";
 import { appVersion } from "./utils/version";
+import { buscarCaixaAberto } from "./services/caixaService";
 
 export const Index = () => {
+  const handleAbrirCaixa = async () => {
+    try {
+      const caixa = await buscarCaixaAberto();
+      if (caixa) {
+        navigate("/caixa"); // Já está aberto, vai vender
+      } else {
+        navigate("/caixa-admin"); // Está fechado, vai abrir
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   const { fazerLogout, usuarioLogado } = useSessao();
 
   const { mostrarConfirmacao, confirmarFechamento, cancelarFechamento } =
@@ -71,7 +85,7 @@ export const Index = () => {
         <div className="grid grid-cols-2 gap-6">
           {/* Botão Caixa */}
           <button
-            onClick={() => navigate("/caixa")}
+            onClick={handleAbrirCaixa}
             className="group h-56 rounded-2xl bg-emerald-500 hover:bg-emerald-600 p-8 flex flex-col justify-between text-left shadow-lg shadow-emerald-500/15 hover:shadow-emerald-500/25 hover:-translate-y-1 transition-all duration-200 cursor-pointer border border-emerald-400/40"
           >
             <div className="flex items-center justify-between">

@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom"; // 👈 Adicionado
+import { useNavigate } from "react-router-dom";
 import { Leitor } from "./components/Leitor";
+import { buscarCaixaAberto } from "./services/caixaService";
+import type { Caixa } from "./types/caixa";
 import "./App.css";
 import { ResumoVenda } from "./components/ResumoVenda";
 import { CaixaRapido } from "./components/CaixaRapido";
@@ -11,18 +13,21 @@ import type { FormaPagamento } from "./types/pagamento";
 import type { ItemVenda } from "./types/venda";
 import { criarVenda } from "./services/vendaService";
 import { useSessao } from "./contexts/SessaoContext";
-import { ModalConfirmacao } from "./components/ModalConfirmacao"; // 👈 Adicionado
+import { ModalConfirmacao } from "./components/ModalConfirmacao";
 
 export const App = () => {
+  const [caixaAtual, setCaixaAtual] = useState<Caixa | null>(null);
   const { usuarioLogado } = useSessao();
   const { dataFormatada, horaFormatada } = useRelogio();
-  const navigate = useNavigate(); // 👈 Adicionado
-  
+  const navigate = useNavigate();
+
   const [produtos, setProdutos] = useState<Produto[]>([]);
   const [itensVenda, setItensVenda] = useState<Produto[]>([]);
-  const [formaPagamento, setFormaPagamento] = useState<FormaPagamento | null>(null);
+  const [formaPagamento, setFormaPagamento] = useState<FormaPagamento | null>(
+    null,
+  );
   const [finalizando, setFinalizando] = useState(false);
-  
+
   // Estado para o modal de saída
   const [mostrarConfirmacaoSair, setMostrarConfirmacaoSair] = useState(false); // 👈 Adicionado
 
@@ -33,6 +38,13 @@ export const App = () => {
 
   useEffect(() => {
     carregarProdutos();
+
+    // Busca o caixa aberto ao montar a tela
+    const carregarCaixa = async () => {
+      const cx = await buscarCaixaAberto();
+      setCaixaAtual(cx);
+    };
+    carregarCaixa();
   }, []);
 
   // Escuta o ESC para sair do caixa
@@ -99,6 +111,10 @@ export const App = () => {
   };
 
   const handleFinalizarVenda = async () => {
+    if (!caixaAtual) {
+      toast("erro", "Nenhum caixa aberto. Abra o caixa primeiro.");
+      return;
+    }
     if (itensVenda.length === 0) {
       toast("info", "Adicione ao menos um item para finalizar a venda.");
       return;
@@ -110,20 +126,22 @@ export const App = () => {
 
     setFinalizando(true);
     try {
-      const itensParaSalvar: Omit<ItemVenda, "id" | "venda_id" | "criado_em">[] =
-        itensVenda.map((item) => ({
-          produto_id: item.id,
-          ean: item.ean,
-          nome: item.nome,
-          tipo: item.tipo,
-          quantidade: item.estoque || 0,
-          preco_unitario: item.preco_venda,
-          preco_total: item.preco_venda * (item.estoque || 0),
-        }));
+      const itensParaSalvar: Omit<
+        ItemVenda,
+        "id" | "venda_id" | "criado_em"
+      >[] = itensVenda.map((item) => ({
+        produto_id: item.id,
+        ean: item.ean,
+        nome: item.nome,
+        tipo: item.tipo,
+        quantidade: item.estoque || 0,
+        preco_unitario: item.preco_venda,
+        preco_total: item.preco_venda * (item.estoque || 0),
+      }));
 
       await criarVenda(
         {
-          caixa_id: 1,
+          caixa_id: caixaAtual?.id || 1,
           usuario_id: usuarioLogado?.id || 1,
           forma_pagamento: formaPagamento,
           total,
