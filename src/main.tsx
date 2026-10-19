@@ -3,6 +3,7 @@ import ReactDOM from "react-dom/client";
 import { HashRouter, Routes, Route, Navigate } from "react-router-dom";
 import { Index } from "./Index";
 import { App } from "./App";
+import { Caixa } from "./Caixa";
 import { Products } from "./Products";
 import { Suporte } from "./Suporte";
 import { Config } from "./Config";
@@ -35,6 +36,15 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
               </RotaProtegida>
             }
           />
+          <Route
+            path="/caixa-admin"
+            element={
+              <RotaProtegida>
+                <Caixa />
+              </RotaProtegida>
+            }
+          />
+
           <Route
             path="/produtos"
             element={
