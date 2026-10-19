@@ -1,4 +1,5 @@
 import { MdBackup, MdOutlineSystemUpdateAlt } from "react-icons/md";
+import { appVersion } from "../utils/version";
 
 export const ConfigSystem = () => {
   return (
@@ -33,7 +34,7 @@ export const ConfigSystem = () => {
           </select>
         </div>
       </div>
-      <div className="px-5 w-2/4 h-50 mt-2 bg-white border-gray-200 border font-semibold rounded-lg shadow-2xl text-gray-400 ">
+      <div className="px-5 w-2/4 h-60 mt-2 bg-white border-gray-200 border font-semibold rounded-lg shadow-2xl text-gray-400 ">
         <h1 className="mt-1 font-semibold text-center text-sm text-gray-500 border-b mb-4">
           DADOS E MANUTENÇÃO
         </h1>
@@ -76,6 +77,9 @@ export const ConfigSystem = () => {
             <MdOutlineSystemUpdateAlt className="w-4 h-4 text-gray-500" />
             <span>Verificar atualizações</span>
           </button>
+        </div>
+        <div className="flex mt-8 justify-end text-xs">
+          Versão do App: {appVersion}
         </div>
       </div>
     </div>

@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { buscarUsuarioPorLogin } from "./services/usuarioService";
 import { useSessao } from "./contexts/SessaoContext";
-import { toast } from "./components/Toast";
+import { toast, ToastContainer } from "./components/Toast";
 
 export const Login = () => {
   const [login, setLogin] = useState("");
@@ -46,6 +46,7 @@ export const Login = () => {
 
   return (
     <div className="w-screen h-screen flex items-center justify-center bg-slate-50">
+      <ToastContainer />
       <div className="bg-white p-8 rounded-2xl shadow-xl w-full max-w-sm border border-gray-100">
         <div className="text-center mb-6">
           <h1 className="text-2xl font-bold text-gray-800">FRONT PDV</h1>

@@ -4,8 +4,12 @@ import { useNavigate } from "react-router-dom";
 import { useRelogio } from "./hooks/useRelogio";
 import { useCloseApp } from "./hooks/useCloseApp";
 import { ModalConfirmacao } from "./components/ModalConfirmacao";
+import { useSessao } from "./contexts/SessaoContext";
+import { appVersion } from "./utils/version";
 
 export const Index = () => {
+  const { fazerLogout, usuarioLogado } = useSessao();
+
   const { mostrarConfirmacao, confirmarFechamento, cancelarFechamento } =
     useCloseApp();
 
@@ -50,6 +54,15 @@ export const Index = () => {
               Sistema Online
             </span>
           </div>
+          <button
+            onClick={() => {
+              fazerLogout();
+              navigate("/login");
+            }}
+            className="text-xs font-bold text-red-500 hover:text-red-700 bg-red-50 hover:bg-red-100 px-3 py-1.5 rounded-lg transition"
+          >
+            Sair ({usuarioLogado?.nome.split(" ")[0]})
+          </button>
         </div>
       </header>
 
@@ -235,7 +248,7 @@ export const Index = () => {
             Sair
           </span>
         </div>
-        <span>v1.0.0</span>
+        <span>v{appVersion}</span>
       </footer>
 
       <ModalConfirmacao

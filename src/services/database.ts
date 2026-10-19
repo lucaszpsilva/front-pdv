@@ -137,5 +137,19 @@ export async function getDatabase(): Promise<Database> {
     )
   `);
 
+  // ═══════════════════════════════════════════════════════════════
+  // 8. SEED — Cria o admin se a tabela estiver vazia
+  // ═══════════════════════════════════════════════════════════════
+  const checkAdmin = await db.select<{ total: number }[]>(
+    "SELECT COUNT(*) as total FROM usuarios",
+  );
+
+  if (checkAdmin[0].total === 0) {
+    await db.execute(
+      `INSERT INTO usuarios (nome, login, senha, tipo, ativo) 
+       VALUES ('Administrador', 'admin', 'admin', 'admin', 1)`,
+    );
+  }
+
   return db;
 }

@@ -9,8 +9,10 @@ import { Produto, listarProdutos } from "./services/productService";
 import type { FormaPagamento } from "./types/pagamento";
 import type { ItemVenda } from "./types/venda";
 import { criarVenda } from "./services/vendaService";
+import { useSessao } from "./contexts/SessaoContext";
 
 export const App = () => {
+  const { usuarioLogado } = useSessao();
   const { dataFormatada, horaFormatada } = useRelogio();
   const [produtos, setProdutos] = useState<Produto[]>([]);
   const [itensVenda, setItensVenda] = useState<Produto[]>([]);
@@ -105,7 +107,7 @@ export const App = () => {
       await criarVenda(
         {
           caixa_id: 1,
-          usuario_id: 1,
+          usuario_id: usuarioLogado?.id || 1,
           forma_pagamento: formaPagamento,
           total,
           desconto: 0,
@@ -138,6 +140,10 @@ export const App = () => {
             Venda <span className="text-gray-900">#0000</span>
           </h2>
         </div>
+        <span className="mx-auto text-gray-500">
+          Operador:
+          <strong className="text-gray-800"> {usuarioLogado?.nome}</strong>
+        </span>
         <div className="flex items-center ml-auto">
           <span className="mr-5 text-gray-500">{dataFormatada}</span>
           <span className="mr-5 text-sm">{horaFormatada}</span>
