@@ -5,7 +5,12 @@ import type { Caixa } from "../types/caixa";
 export async function buscarCaixaAberto(): Promise<Caixa | null> {
   const db = await getDatabase();
   const resultado = await db.select<Caixa[]>(
-    "SELECT * FROM caixa WHERE status = 'aberto' LIMIT 1",
+    // Trazer os campos explícitos e forçar o status a ser lido como texto
+    `SELECT id, usuario_id, valor_fundo, valor_fechamento, observacao, 
+            data_abertura, data_fechamento, status 
+     FROM caixa 
+     WHERE CAST(status AS TEXT) = 'aberto' 
+     ORDER BY id DESC LIMIT 1`,
   );
   return resultado.length > 0 ? resultado[0] : null;
 }

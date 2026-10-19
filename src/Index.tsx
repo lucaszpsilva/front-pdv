@@ -6,20 +6,12 @@ import { useCloseApp } from "./hooks/useCloseApp";
 import { ModalConfirmacao } from "./components/ModalConfirmacao";
 import { useSessao } from "./contexts/SessaoContext";
 import { appVersion } from "./utils/version";
-import { buscarCaixaAberto } from "./services/caixaService";
 
 export const Index = () => {
-  const handleAbrirCaixa = async () => {
-    try {
-      const caixa = await buscarCaixaAberto();
-      if (caixa) {
-        navigate("/caixa"); // Já está aberto, vai vender
-      } else {
-        navigate("/caixa-admin"); // Está fechado, vai abrir
-      }
-    } catch (error) {
-      console.error(error);
-    }
+  const navigate = useNavigate();
+
+  const handleAbrirCaixa = () => {
+    navigate("/caixa-admin");
   };
 
   const { fazerLogout, usuarioLogado } = useSessao();
@@ -28,7 +20,6 @@ export const Index = () => {
     useCloseApp();
 
   const { dataFormatada, horaFormatada } = useRelogio();
-  const navigate = useNavigate();
 
   // ✅ Função para o Produtos (F2)
   const openProdutos = async () => {
