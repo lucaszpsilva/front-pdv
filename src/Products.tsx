@@ -116,7 +116,7 @@ export const Products = () => {
       <header className="h-12 flex border-b border-gray-300 bg-white items-center px-4 shrink-0 rounded-xl">
         <div className="flex items-center">
           <button
-            onClick={() => navigate("/")}
+            onClick={() => navigate("/index")}
             className="border-r border-gray-300 pr-4 cursor-pointer text-gray-600 hover:text-gray-900 font-medium"
           >
             ← Início

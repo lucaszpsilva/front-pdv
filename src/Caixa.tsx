@@ -96,7 +96,7 @@ export const Caixa = () => {
             {caixaAtual ? "Caixa em Operação" : "Abertura de Caixa"}
           </h1>
           <button
-            onClick={() => navigate("/")}
+            onClick={() => navigate("/index")}
             className="text-sm text-gray-400 hover:text-gray-700 font-medium"
           >
             Voltar ao menu

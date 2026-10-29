@@ -18,20 +18,20 @@ export const ConfigSystem = () => {
         <div className="flex gap-3 w-full">
           <button className="px-3 h-8 w-full border bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-transform duration-200 cursor-pointer">
             ☼ Claro
-          </button>{" "}
+          </button>
           <button className="px-3 h-8 w-full border text-gray-400 rounded-lg hover:border-gray-500 hover:text-gray-500 transition-transform duration-200 cursor-pointer">
             ☽ Escuro
           </button>
         </div>
         <div className="mt-6 flex text-center justify-center">
-          <label htmlFor="idioma">SELECIONE O IDIOMA →</label>
-          <select
-            name="idioma"
-            className=" text-gray-500 ml-2 border w-40 rounded-lg bg-blue-50"
-          >
-            <option value="pt-br">Português</option>
-            <option value="english">Inglês</option>
-          </select>
+            <label htmlFor="idioma">SELECIONE O IDIOMA →</label>
+            <select
+              name="idioma"
+              className=" text-gray-500 ml-2 border w-40 rounded-lg bg-blue-50"
+            >
+              <option value="pt-br">Português</option>
+              <option value="english">Inglês</option>
+            </select>
         </div>
       </div>
       <div className="px-5 w-2/4 h-60 mt-2 bg-white border-gray-200 border font-semibold rounded-lg shadow-2xl text-gray-400 ">

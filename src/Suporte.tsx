@@ -12,7 +12,7 @@ export const Suporte = () => {
       <header className="h-12 flex items-center justify-between bg-white px-6 border-b border-gray-200 shrink-0">
         <div className="flex items-center">
           <button
-            onClick={() => navigate("/")}
+            onClick={() => navigate("/index")}
             className="border-r border-gray-200 pr-4 cursor-pointer text-gray-600 hover:text-gray-900 font-medium transition-colors"
           >
             ← Início

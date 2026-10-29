@@ -10,6 +10,7 @@ import { Config } from "./Config";
 import { Login } from "./Login";
 import { SessaoProvider } from "./contexts/SessaoContext";
 import { RotaProtegida } from "./components/RotaProtegida";
+import { Licenca } from "./Licenca";
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>
@@ -18,10 +19,11 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
         <Routes>
           {/* Rota pública */}
           <Route path="/login" element={<Login />} />
+          <Route path="/" element={<Licenca />} />
 
           {/* Rotas protegidas */}
           <Route
-            path="/"
+            path="/index"
             element={
               <RotaProtegida>
                 <Index />

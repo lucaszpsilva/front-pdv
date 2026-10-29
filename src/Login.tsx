@@ -35,7 +35,7 @@ export const Login = () => {
       // Login com sucesso
       fazerLogin(usuario);
       toast("sucesso", `Bem-vindo, ${usuario.nome}!`);
-      navigate("/"); // Vai pro Index
+      navigate("/index"); // Vai pro Index
     } catch (error) {
       console.error(error);
       toast("erro", "Erro ao tentar fazer login.");

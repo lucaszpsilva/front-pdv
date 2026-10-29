@@ -15,7 +15,7 @@
         "title": "frontpdv",
         "fullscreen": false,
         "maximized": true,
-        "resizable": true,
+        "resizable": false,
         "closable": true,
         "minimizable": true,
         "maximizable": true
