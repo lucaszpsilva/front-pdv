@@ -8,8 +8,10 @@ import {
   atualizarUsuario,
   desativarUsuario,
 } from "../services/usuarioService";
+import { useSessao } from "../contexts/SessaoContext";
 
 export const Usuarios = () => {
+  const { isAdmin } = useSessao();
   const [usuarios, setUsuarios] = useState<Usuario[]>([]);
   const [modalAberto, setModalAberto] = useState(false);
   const [usuarioSelecionado, setUsuarioSelecionado] = useState<Usuario | null>(
@@ -73,12 +75,14 @@ export const Usuarios = () => {
         <h2 className="text-sm font-semibold text-gray-500">
           Operadores e administradores
         </h2>
-        <button
-          onClick={handleNovo}
-          className="px-4 py-2 bg-emerald-500 hover:bg-emerald-600 text-white rounded-lg font-bold text-sm cursor-pointer transition"
-        >
-          + Novo Usuário
-        </button>
+        {isAdmin && (
+          <button
+            onClick={handleNovo}
+            className="px-4 py-2 bg-emerald-500 hover:bg-emerald-600 text-white rounded-lg font-bold text-sm cursor-pointer transition"
+          >
+            + Novo Usuário
+          </button>
+        )}
       </div>
 
       <div className="bg-white border border-gray-200 rounded-2xl overflow-hidden">
@@ -86,7 +90,7 @@ export const Usuarios = () => {
           <div className="col-span-5">Nome</div>
           <div className="col-span-3">Login</div>
           <div className="col-span-2">Tipo</div>
-          <div className="col-span-2 text-right">Ações</div>
+          {isAdmin && <div className="col-span-2 text-right">Ações</div>}
         </div>
 
         {usuarios.length === 0 ? (
@@ -115,18 +119,22 @@ export const Usuarios = () => {
                 </span>
               </div>
               <div className="col-span-2 flex justify-end gap-2">
-                <button
-                  onClick={() => handleEditar(u)}
-                  className="text-xs text-emerald-600 hover:underline cursor-pointer"
-                >
-                  Editar
-                </button>
-                <button
-                  onClick={() => handleDesativar(u)}
-                  className="text-xs text-red-500 hover:underline cursor-pointer"
-                >
-                  Desativar
-                </button>
+                {isAdmin && (
+                  <button
+                    onClick={() => handleEditar(u)}
+                    className="text-xs text-emerald-600 hover:underline cursor-pointer"
+                  >
+                    Editar
+                  </button>
+                )}
+                {isAdmin && (
+                  <button
+                    onClick={() => handleDesativar(u)}
+                    className="text-xs text-red-500 hover:underline cursor-pointer"
+                  >
+                    Desativar
+                  </button>
+                )}
               </div>
             </div>
           ))

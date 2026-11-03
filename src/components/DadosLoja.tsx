@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import type { DadosDaLoja } from "../services/lojaService";
 import { buscarDadosDaLoja, salvarDadosLoja } from "../services/lojaService";
 import { toast, ToastContainer } from "./Toast";
+import { useSessao } from "../contexts/SessaoContext";
 
 export const formatarCEP = (valor: string) => {
   // remove tudo que não for digito
@@ -40,6 +41,9 @@ export const formatarTelefone = (valor: string) => {
 };
 
 export const DadosLoja = () => {
+  const { isAdmin } = useSessao();
+  const inputStyle = `w-full mt-1 h-6 pl-3 flex border rounded text-sm border-gray-400 focus:outline-0 focus:ring-0 transition-colors
+    ${!isAdmin ? "bg-gray-200 text-gray-500 cursor-not-allowed opacity-80" : "bg-blue-50 text-gray-400"}`;
   const [loja, setLoja] = useState<DadosDaLoja>({
     nome: "",
     cnpj: "",
@@ -99,7 +103,8 @@ export const DadosLoja = () => {
             onChange={(e) => setLoja({ ...loja, nome: e.target.value })}
             type="text"
             placeholder="Loja Central"
-            className="w-full mt-1 h-6 pl-3 flex border rounded text-sm text-gray-400 border-gray-400 bg-blue-50 focus:outline-0 focus:ring-0"
+            className={inputStyle}
+            disabled={!isAdmin}
           />
         </label>
         <div>
@@ -114,7 +119,8 @@ export const DadosLoja = () => {
                   }
                   type="text"
                   placeholder="99.999.999/0001-09"
-                  className="w-full mt-1 h-6 pl-3 flex border rounded text-sm border-gray-400 bg-blue-50 focus:outline-0"
+                  className={inputStyle}
+                  disabled={!isAdmin}
                 />
               </label>
             </div>
@@ -131,7 +137,8 @@ export const DadosLoja = () => {
                   }
                   type="text"
                   placeholder="(11) 99999-9999"
-                  className=" mt-1 h-6 pl-3 flex flex-1 border rounded text-sm border-gray-400 bg-blue-50 focus:outline-0"
+                  className={inputStyle}
+                  disabled={!isAdmin}
                 />
               </label>
             </div>
@@ -145,7 +152,8 @@ export const DadosLoja = () => {
               onChange={(e) => setLoja({ ...loja, email: e.target.value })}
               type="text"
               placeholder="contato@lojacentral.com.br"
-              className="w-full mt-1 h-6 pl-3 flex border rounded text-sm text-gray-400 border-gray-400 bg-blue-50 focus:outline-0"
+              className={inputStyle}
+              disabled={!isAdmin}
             />
           </label>
         </div>
@@ -164,7 +172,8 @@ export const DadosLoja = () => {
             onChange={(e) => setLoja({ ...loja, logradouro: e.target.value })}
             type="text"
             placeholder="Rua das flores, 123. "
-            className="w-full mt-1 h-6 pl-3 flex border rounded text-sm text-gray-400 border-gray-400 bg-blue-50 focus:outline-0 focus:ring-0"
+            className={inputStyle}
+            disabled={!isAdmin}
           />
         </label>
         <div>
@@ -177,7 +186,8 @@ export const DadosLoja = () => {
                   onChange={(e) => setLoja({ ...loja, cidade: e.target.value })}
                   type="text"
                   placeholder="São Paulo"
-                  className="w-full mt-1 h-6 pl-3 flex-1 border rounded text-sm border-gray-400 bg-blue-50 focus:outline-0"
+                  className={inputStyle}
+                  disabled={!isAdmin}
                 />
               </label>
             </div>
@@ -189,7 +199,8 @@ export const DadosLoja = () => {
                   onChange={(e) => setLoja({ ...loja, estado: e.target.value })}
                   type="text"
                   placeholder="SP"
-                  className="w-20 mt-1 h-6 pl-3 flex border rounded text-sm border-gray-400 bg-blue-50 focus:outline-0"
+                  className={inputStyle}
+                  disabled={!isAdmin}
                 />
               </label>
             </div>
@@ -203,7 +214,8 @@ export const DadosLoja = () => {
                   }
                   type="text"
                   placeholder="99999-999"
-                  className=" mt-1 h-6 pl-3 flex flex-1 border rounded text-sm border-gray-400 bg-blue-50 focus:outline-0"
+                  className={inputStyle}
+                  disabled={!isAdmin}
                 />
               </label>
             </div>
@@ -211,12 +223,14 @@ export const DadosLoja = () => {
         </div>
       </div>
       <div className="flex w-2/4 justify-end ">
-        <button
-          onClick={handleSalvar}
-          className="px-3 h-8 mt-3 border bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-transform duration-200 cursor-pointer"
-        >
-          ✓ Salvar Alterações
-        </button>
+        {isAdmin && (
+          <button
+            onClick={handleSalvar}
+            className="px-3 h-8 mt-3 border bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-transform duration-200 cursor-pointer"
+          >
+            ✓ Salvar Alterações
+          </button>
+        )}
       </div>
       <ToastContainer />
     </div>

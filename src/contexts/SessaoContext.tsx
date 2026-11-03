@@ -3,6 +3,7 @@ import type { Usuario } from "../types/usuario";
 
 type SessaoContextType = {
   usuarioLogado: Usuario | null;
+  isAdmin: boolean;
   fazerLogin: (usuario: Usuario) => void;
   fazerLogout: () => void;
 };
@@ -16,6 +17,8 @@ export const SessaoProvider = ({ children }: { children: ReactNode }) => {
     return salvo ? JSON.parse(salvo) : null;
   });
 
+  const isAdmin = usuarioLogado?.tipo === "admin";
+
   const fazerLogin = (usuario: Usuario) => {
     setUsuarioLogado(usuario);
     localStorage.setItem("@frontpdv:usuario", JSON.stringify(usuario));
@@ -27,7 +30,9 @@ export const SessaoProvider = ({ children }: { children: ReactNode }) => {
   };
 
   return (
-    <SessaoContext.Provider value={{ usuarioLogado, fazerLogin, fazerLogout }}>
+    <SessaoContext.Provider
+      value={{ usuarioLogado, isAdmin, fazerLogin, fazerLogout }}
+    >
       {children}
     </SessaoContext.Provider>
   );
