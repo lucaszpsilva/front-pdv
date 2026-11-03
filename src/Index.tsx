@@ -146,7 +146,7 @@ export const Index = () => {
         {/* Linha Inferior */}
         <div className="grid grid-cols-3 gap-6">
           <button
-            onClick={() => navigate("/relatorios")}
+            onClick={() => navigate("/index")}
             className="group h-36 rounded-2xl bg-white hover:bg-gray-150 border border-gray-200 hover:border-gray-300 p-5 flex flex-col justify-between text-left shadow-xs hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 cursor-pointer"
           >
             <span className="p-2.5 bg-gray-100 rounded-lg w-fit text-gray-600 group-hover:text-emerald-600 group-hover:bg-emerald-50 transition-colors">
